@@ -115,6 +115,54 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
     @IBAction func translateButton(_ sender: Any) {
         
+        var codonTable = [
+            "AUA":"Ile", "AUC":"Ile", "AUU":"Ile", "AUG":"Met",
+            "ACA":"Thr", "ACC":"Thr", "ACG":"Thr", "ACU":"Thr",
+            "AAC":"Asn", "AAU":"Asn", "AAA":"Lys", "AAG":"Lys",
+            "AGC":"Ser", "AGU":"Ser", "AGA":"Arg", "AGG":"Arg",
+            "CUA":"Leu", "CUC":"Leu", "CUG":"Leu", "CUU":"Leu",
+            "CCA":"Pro", "CCC":"Pro", "CCG":"Pro", "CCU":"Pro",
+            "CAC":"His", "CAU":"His", "CAA":"Gln", "CAG":"Gln",
+            "CGA":"Arg", "CGC":"Arg", "CGG":"Arg", "CGU":"Arg",
+            "GUA":"Val", "GUC":"Val", "GUG":"Val", "GUU":"Val",
+            "GCA":"Ala", "GCC":"Ala", "GCG":"Ala", "GCU":"Ala",
+            "GAC":"Asp", "GAU":"Asp", "GAA":"Glu", "GAG":"Glu",
+            "GGA":"Gly", "GGC":"Gly", "GGG":"Gly", "GGU":"Gly",
+            "UCA":"Ser", "UCC":"Ser", "UCG":"Ser", "UCU":"Ser",
+            "UUC":"Phe", "UUU":"Phe", "UUA":"Leu", "UUG":"Leu",
+            "UAC":"Tyr", "UAU":"Tyr", "UAA":"Stop", "UAG":"Stop",
+            "UGC":"Cys", "UGU":"Cys", "UGA":"Stop", "UGG":"Trp",
+            ]
+        
+        var numberOfCharacters = 0
+        var rnaSequence = ""
+        var mRNA = ""
+        
+        var checkRNA = ""
+
+        for i in textField2.text! {
+            rnaSequence.append(String(i))
+            checkRNA.append(String(i))
+            numberOfCharacters += 1
+            print(numberOfCharacters)
+            
+            if numberOfCharacters % 3 == 0 {
+
+                rnaSequence.append("---")
+                print(rnaSequence)
+
+                for (codon,aminoAcid) in codonTable {
+                    if checkRNA == codon {
+                        mRNA.append(aminoAcid)
+                        mRNA.append("-")
+                        labelTranslated.text! = mRNA
+                        checkRNA.removeAll()
+                    }
+                    
+                }
+            }
+        }
+        
      
     }
     
