@@ -18,6 +18,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var transcribeButtonOutlet: UIButton!
     @IBOutlet weak var translateButtonOutlet: UIButton!
     @IBOutlet weak var headerLabel: UILabel!
+    @IBOutlet weak var singleLetterAminoAcidOutlet: UIButton!
+    @IBOutlet weak var labelSingleLetterAminoAcids: UILabel!
+    
     
     // Video Background
     var player: AVPlayer!
@@ -51,6 +54,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
         translateButtonOutlet.setTitleColor(.white, for: .normal)
         translateButtonOutlet.layer.borderWidth = 0.5
         translateButtonOutlet.layer.borderColor = UIColor(white: 1.0, alpha: 0.9).cgColor
+        singleLetterAminoAcidOutlet.setTitleColor(.white, for: .normal)
+        singleLetterAminoAcidOutlet.layer.borderWidth = 0.5
+        singleLetterAminoAcidOutlet.layer.borderColor = UIColor(white: 1.0, alpha:0.9).cgColor
+        
+        // Button Booleans
+        singleLetterAminoAcidOutlet.isHidden = true
         
         // Label Color
         headerLabel.textColor = UIColor.white
@@ -111,7 +120,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         
     }
-    
+
 
     @IBAction func translateButton(_ sender: Any) {
         
@@ -135,21 +144,20 @@ class ViewController: UIViewController, UITextFieldDelegate {
             ]
         
         var numberOfCharacters = 0
-        var rnaSequence = ""
+        var rnaSequenceDebug = ""
         var mRNA = ""
-        
         var checkRNA = ""
-
+        
         for i in textField2.text! {
-            rnaSequence.append(String(i))
+            rnaSequenceDebug.append(String(i))
             checkRNA.append(String(i))
             numberOfCharacters += 1
             print(numberOfCharacters)
             
             if numberOfCharacters % 3 == 0 {
 
-                rnaSequence.append("---")
-                print(rnaSequence)
+                rnaSequenceDebug.append("---")
+                print(rnaSequenceDebug)
 
                 for (codon,aminoAcid) in codonTable {
                     if checkRNA == codon {
@@ -157,6 +165,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
                         mRNA.append("-")
                         labelTranslated.text! = mRNA
                         checkRNA.removeAll()
+                        singleLetterAminoAcidOutlet.isHidden = false
                     }
                     
                 }
@@ -165,6 +174,37 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
      
     }
+    
+    @IBAction func singleLetterAminoAcidButton(_ sender: Any) {
+
+        let aminoDictionary = ["G":"Gly", "A":"Ala", "L":"Leu", "M":"Met", "F":"Phe", "W":"Trp", "K":"Lys", "Q":"Gln", "E":"Glu", "S":"Ser", "P":"Pro", "V":"Val", "I":"Ile", "C":"Cys", "Y":"Tyr", "H":"His", "R":"Arg", "N":"Asn", "D":"Asp", "T":"Thr"]
+        var aminoAcidString = ""
+        var checkAmino = ""
+        var numberOfLetters = 0
+        var aminosWithoutDashes = labelTranslated.text!.replacingOccurrences(of: "-", with: "", options: NSString.CompareOptions.literal, range:nil)
+        
+        for n in aminosWithoutDashes {
+            numberOfLetters += 1
+            checkAmino.append(n)
+            
+            if numberOfLetters % 3 == 0 {
+                
+        for (singleLetter, threeLetter) in aminoDictionary {
+            if checkAmino == threeLetter  {
+                aminoAcidString.append(singleLetter)
+                aminoAcidString.append("-")
+                labelSingleLetterAminoAcids.text! = aminoAcidString
+                checkAmino.removeAll()
+            }
+            
+                }
+            }
+
+        }
+
+    }
+    
+    
     
     // Return key tapped hides keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
