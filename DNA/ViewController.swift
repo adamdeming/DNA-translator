@@ -53,6 +53,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var singleLetterAminoAcidOutlet: UIButton!
     @IBOutlet weak var countLabel1: UILabel!
     @IBOutlet weak var countLabel2: UILabel!
+    @IBOutlet weak var complementButtonOutlet: UIButton!
     
     // Video Background
     var player: AVPlayer!
@@ -61,6 +62,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     //
     var width: CGFloat!
     var height: CGFloat!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -96,49 +98,31 @@ class ViewController: UIViewController, UITextFieldDelegate {
         textField2.setBottomBorder()
         
         // Count Label UI Setup
-        countLabel1.isHidden = true
-        countLabel1.frame = CGRect(x: width * 0.074, y: height * 0.3, width: countLabel1.frame.width, height: countLabel1.frame.height)
+        countLabel1.frame = CGRect(x: 40, y: textField.frame.origin.y + 40, width: countLabel1.frame.width, height: countLabel1.frame.height)
         view.addSubview(countLabel1)
-        
-        countLabel2.isHidden = true
-        countLabel2.frame = CGRect(x: width * 0.074, y: height * 0.5, width: countLabel2.frame.width, height: countLabel2.frame.height)
+        countLabel1.text = "0"
+        countLabel2.frame = CGRect(x: 40, y: textField2.frame.origin.y + 40, width: countLabel2.frame.width, height: countLabel2.frame.height)
         view.addSubview(countLabel2)
+        countLabel2.text = "0"
         
         // Button UI Setup
-        transcribeButtonOutlet.frame = CGRect(x: width * 0.42, y: height * 0.3, width: transcribeButtonOutlet.frame.width, height: transcribeButtonOutlet.frame.height)
+        transcribeButtonOutlet.frame = CGRect(x: (width / 2) - (transcribeButtonOutlet.frame.size.width/2), y: textField.frame.origin.y + 40, width: transcribeButtonOutlet.frame.width, height: transcribeButtonOutlet.frame.height)
         view.addSubview(transcribeButtonOutlet)
         
-        translateButtonOutlet.frame = CGRect(x: width * 0.42, y: height * 0.5, width: translateButtonOutlet.frame.width, height: translateButtonOutlet.frame.height)
+        translateButtonOutlet.frame = CGRect(x: (width / 2) - (translateButtonOutlet.frame.size.width/2), y: textField2.frame.origin.y + 40, width: translateButtonOutlet.frame.width, height: translateButtonOutlet.frame.height)
         view.addSubview(translateButtonOutlet)
         
+        complementButtonOutlet.frame = CGRect(x: (width-40) - complementButtonOutlet.frame.size.width, y: textField.frame.origin.y + 40, width: complementButtonOutlet.frame.width, height: complementButtonOutlet.frame.height)
+        view.addSubview(singleLetterAminoAcidOutlet)
+        
         singleLetterAminoAcidOutlet.isHidden = true
-        singleLetterAminoAcidOutlet.frame = CGRect(x: width * 0.79, y: height * 0.5, width: singleLetterAminoAcidOutlet.frame.width, height: singleLetterAminoAcidOutlet.frame.height)
+        singleLetterAminoAcidOutlet.frame = CGRect(x: (width-40) - singleLetterAminoAcidOutlet.frame.size.width, y: textField2.frame.origin.y + 40, width: singleLetterAminoAcidOutlet.frame.width, height: singleLetterAminoAcidOutlet.frame.height)
         view.addSubview(singleLetterAminoAcidOutlet)
         
         // Label UI Setup
-        labelTranslated.frame = CGRect(x: 40, y: height * 0.6, width: width-80, height: labelTranslated.frame.height)
+        labelTranslated.frame = CGRect(x: 40, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.height)
         view.addSubview(labelTranslated)
         
-        // Transparent Text Field
-//        textField.alpha = 0.8
-//        textField2.alpha = 0.8
-
-        // Button Borders & Color
-        transcribeButtonOutlet.setTitleColor(.white, for: .normal)
-        transcribeButtonOutlet.layer.borderWidth = 0.5
-        transcribeButtonOutlet.layer.borderColor = UIColor(white: 1.0, alpha: 0.9).cgColor
-        
-        translateButtonOutlet.setTitleColor(.white, for: .normal)
-        translateButtonOutlet.layer.borderWidth = 0.5
-        translateButtonOutlet.layer.borderColor = UIColor(white: 1.0, alpha: 0.9).cgColor
-        
-        singleLetterAminoAcidOutlet.setTitleColor(.white, for: .normal)
-        singleLetterAminoAcidOutlet.layer.borderWidth = 0.5
-        singleLetterAminoAcidOutlet.layer.borderColor = UIColor(white: 1.0, alpha:0.9).cgColor
-        
-        // Rounded Borders Text Fields
-//        textField.borderStyle = UITextBorderStyle.roundedRect
-//        textField2.borderStyle = UITextBorderStyle.roundedRect
         
         // Tap View to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
@@ -162,8 +146,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBAction func transcribeButton(_ sender: Any) {
 
         // Count Label
-        countLabel1.isHidden = false
         countLabel1.text = "\(textField.text!.count)"
+        countLabel2.text = "\(textField.text!.count)"
         
         var maturemRNA = ""
         //var complementaryRNA = ""
@@ -178,6 +162,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 //complementaryRNA = ""
                 textField2.text = ""
                 labelTranslated.text = ""
+                countLabel1.text = "0"
+                countLabel2.text = "0"
             }
         }
         
@@ -199,28 +185,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 print(i)
             }
         }
-        
-        
-//        // complementary mRNA transcription
-//            for i in textField.text! {
-//                switch i {
-//                case "G":
-//                    complementaryRNA.append("C")
-//                    textField2.text = mRNA
-//                case "A":
-//                    complementaryRNA.append("U")
-//                    textField2.text = mRNA
-//                case "C":
-//                    complementaryRNA.append("G")
-//                    textField2.text = mRNA
-//                case "T":
-//                    complementaryRNA.append("A")
-//                    textField2.text = mRNA
-//                default:
-//                    print(i)
-//                }
-        //            }
-        
 
         textFieldShouldReturn(textField)
         
@@ -228,11 +192,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
 
     @IBAction func translateButton(_ sender: Any) {
-        
-        // Count Label
-        countLabel2.isHidden = false
+    
         countLabel2.text = "\(textField2.text!.count)"
-
+        
         var codonTable = [
             "AUA":"Ile", "AUC":"Ile", "AUU":"Ile", "AUG":"Met",
             "ACA":"Thr", "ACC":"Thr", "ACG":"Thr", "ACU":"Thr",
@@ -266,6 +228,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 RNA = ""
                 textField.text = ""
                 labelTranslated.text = ""
+                countLabel1.text = "0"
+                countLabel2.text = "0"
             }
         }
         
@@ -297,29 +261,46 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
         }
         
+            let main_string = labelTranslated.text!
+            let string_to_color = "Stop"
 
-        if labelTranslated.text!.contains("Stop") {
-            
-            let labelString = labelTranslated.text!
-            let attributedString = NSMutableAttributedString(string: labelString)
-            
-            let highlightedWords = ["Stop"]
+            let range = (main_string as NSString).range(of: string_to_color)
+            let attributedString = NSMutableAttributedString(string:main_string)
+            attributedString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.red , range: range)
+        
+        
+            labelTranslated.attributedText = attributedString
 
-            for highlightedWord in highlightedWords {
-                let textRange = (labelString as NSString).range(of: highlightedWord)
-                
-                if let font = UIFont(name: "Helvetica-Bold", size: 20) {
-                    attributedString.addAttribute(NSAttributedStringKey.font, value: font, range: NSRange(location: 0, length: labelString.count))
-                    attributedString.addAttribute(NSAttributedStringKey.backgroundColor, value: UIColor.red, range: textRange)
-                }
-            }
-
-        labelTranslated.attributedText = attributedString
-        }
 
         // Return Keyboard
         textFieldShouldReturn(textField2)
   }
+    
+    @IBAction func complementButton(_ sender: Any) {
+        var complementString = ""
+        
+        // complementary mRNA transcription
+                    for i in textField.text! {
+                        switch i {
+                        case "G":
+                            complementString.append("C")
+                            textField.text = complementString
+                        case "A":
+                            complementString.append("T")
+                            textField.text = complementString
+                        case "C":
+                            complementString.append("G")
+                            textField.text = complementString
+                        case "T":
+                            complementString.append("A")
+                            textField.text = complementString
+                        default:
+                            print("Complementary DNA")
+                        }
+                    }
+        
+        
+    }
     
     var numberOfTaps = 0
     @IBAction func singleLetterAminoAcidButton(_ sender: Any) {
@@ -376,5 +357,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         view.endEditing(true)
     }
 
+    
 }
 
