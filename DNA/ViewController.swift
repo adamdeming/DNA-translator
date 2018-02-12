@@ -27,6 +27,16 @@ extension String {
     }
 }
 
+extension String
+{
+    func containsNumbers() -> Bool
+    {
+        let numberRegEx  = ".*[0-9]+.*"
+        let testCase     = NSPredicate(format:"SELF MATCHES %@", numberRegEx)
+        return testCase.evaluate(with: self)
+    }
+}
+
 // Bottom Border TextField Extension
 extension UITextField {
     func setBottomBorder() {
@@ -54,6 +64,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var countLabel1: UILabel!
     @IBOutlet weak var countLabel2: UILabel!
     @IBOutlet weak var complementButtonOutlet: UIButton!
+    
     
     // Video Background
     var player: AVPlayer!
@@ -114,7 +125,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         complementButtonOutlet.frame = CGRect(x: (width-40) - complementButtonOutlet.frame.size.width, y: textField.frame.origin.y + 40, width: complementButtonOutlet.frame.width, height: complementButtonOutlet.frame.height)
         view.addSubview(singleLetterAminoAcidOutlet)
-        
+
         singleLetterAminoAcidOutlet.isHidden = true
         singleLetterAminoAcidOutlet.frame = CGRect(x: (width-40) - singleLetterAminoAcidOutlet.frame.size.width, y: textField2.frame.origin.y + 40, width: singleLetterAminoAcidOutlet.frame.width, height: singleLetterAminoAcidOutlet.frame.height)
         view.addSubview(singleLetterAminoAcidOutlet)
@@ -150,14 +161,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
         countLabel2.text = "\(textField.text!.count)"
         
         var maturemRNA = ""
-        //var complementaryRNA = ""
     
         // Letters that aren't G,C,A,T
         let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","U","V","W","X","Y","Z"]
         print(nonNucleotideLetters.count)
         
         for letter in nonNucleotideLetters {
-            if textField.text!.contains(letter) {
+            if textField.text!.contains(letter) || textField.text!.containsNumbers() {
                 textField.text = "Nucleotide not recognized"
                 //complementaryRNA = ""
                 textField2.text = ""
@@ -223,7 +233,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         print(nonNucleotideLetters.count)
         
         for letter in nonNucleotideLetters {
-            if textField2.text!.contains(letter) {
+            if textField2.text!.contains(letter) || textField2.text!.containsNumbers() {
                 textField2.text = "Nucleotide not recognized"
                 RNA = ""
                 textField.text = ""
@@ -233,8 +243,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
             }
         }
         
-        
-            
         for i in textField2.text! {
             rnaSequenceDebug.append(String(i))
             checkRNA.append(String(i))
@@ -344,7 +352,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
 
     }
-
+    
     // Return key tapped hides keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
@@ -356,6 +364,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
+    
 
     
 }
