@@ -11,7 +11,7 @@ import AVFoundation
 
 
 
-class ViewController: UIViewController, UITextFieldDelegate {
+class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
 
     // Outlets
     @IBOutlet weak var textField: UITextField!
@@ -27,9 +27,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var leadingC: NSLayoutConstraint!
     @IBOutlet weak var trailingC: NSLayoutConstraint!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var navBar: UINavigationItem!
+    
     
     var menuIsVisible = false
-    
     
     // Video Background
     var player: AVPlayer!
@@ -39,6 +41,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var width: CGFloat!
     var height: CGFloat!
     
+    let cellReuseIdentifier = "cell"
+    var threeLetterArray = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,10 +68,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
 //        view.layer.insertSublayer(playerLayer, at: 0)
         
         // TextField UI Setup
-        textField.frame = CGRect(x: 40, y: height * 0.2, width: width-80, height: textField.frame.height)
+        textField.frame = CGRect(x: 40, y: height * 0.1, width: width-80, height: textField.frame.height)
         mainView.addSubview(textField)
         
-        textField2.frame = CGRect(x: 40, y: height * 0.4, width: width-80, height: textField2.frame.height)
+        textField2.frame = CGRect(x: 40, y: height * 0.3, width: width-80, height: textField2.frame.height)
         mainView.addSubview(textField)
         
         textField.setBottomBorder()
@@ -108,6 +112,26 @@ class ViewController: UIViewController, UITextFieldDelegate {
         self.textField.delegate = self
         self.textField2.delegate = self
         
+        // Gestures
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+        swipeLeft.direction = .left
+        self.view.addGestureRecognizer(swipeLeft)
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+        swipeRight.direction = .right
+        self.view.addGestureRecognizer(swipeRight)
+        
+        // Table View Delegate
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        tableView.delegate = self
+        tableView.dataSource = self
+        
+//        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+//        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+//        blurEffectView.frame = tableView.bounds
+//        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        tableView.addSubview(blurEffectView)
+
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -247,6 +271,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
         // Return Keyboard
         textFieldShouldReturn(textField2)
+        
+        // Update History Table View
+        threeLetterArray.insert(labelTranslated.text!, at: 0)
+        threeLetterArray = threeLetterArray.filter { $0 != "" }
+        print("HistoryArray: \(threeLetterArray)")
+        tableView.reloadData()
   }
     
     @IBAction func complementButton(_ sender: Any) {
@@ -333,21 +363,70 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBAction func menuAction(_ sender: Any) {
         
         if !menuIsVisible {
-            leadingC.constant = 150
-            trailingC.constant = -150
+            leadingC.constant = 500
+            trailingC.constant = -500
+            countLabel1.isHidden = true
+            countLabel2.isHidden = true
+            navBar.title = "history"
             menuIsVisible = true
         } else {
             leadingC.constant = 0
             trailingC.constant = 0
+            countLabel1.isHidden = false
+            countLabel2.isHidden = false
+            navBar.title = ""
             menuIsVisible = false
         }
         
         UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseIn, animations: { self.view.layoutIfNeeded()
         }) { (animationComplete) in
-            print("The animation is complete!")
+            print("animation is complete")
         }
-
+        
     }
+    
+    
+    
+    @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
+        if gesture.direction == UISwipeGestureRecognizerDirection.right {
+            print("Swipe Right")
+            self.menuAction((Any).self)
+            
+        }
+        else if gesture.direction == UISwipeGestureRecognizerDirection.left {
+            print("Swipe Left")
+            if menuIsVisible == true {
+            self.menuAction((Any).self)
+            }
+        }
+  
+    }
+
+    
+    // number of rows in table view
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.threeLetterArray.count
+    }
+    
+    // create a cell for each table view row
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        // create a new cell if needed or reuse an old one
+        let cell:UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell!
+        
+        // set the text from the data model
+        cell.textLabel?.text = self.threeLetterArray[indexPath.row]
+        
+        return cell
+    }
+    
+    // method to run when table view cell is tapped
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("You tapped cell number \(indexPath.row).")
+    }
+    
+    
+    
 }
 
 extension String {
