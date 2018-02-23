@@ -13,7 +13,6 @@
 		D00BFCD21FD79DD300ACFDCF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D00BFCD01FD79DD300ACFDCF /* LaunchScreen.storyboard */; };
 		D00BFCDD1FD79DD300ACFDCF /* DNATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BFCDC1FD79DD300ACFDCF /* DNATests.swift */; };
 		D00BFCE81FD79DD300ACFDCF /* DNAUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BFCE71FD79DD300ACFDCF /* DNAUITests.swift */; };
-		D06D07331FE86CBD00C910E4 /* plant.mov in Resources */ = {isa = PBXBuildFile; fileRef = D06D07321FE86CBD00C910E4 /* plant.mov */; };
 		D06D07351FE8716600C910E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D06D07341FE8716600C910E4 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -47,7 +46,6 @@
 		D00BFCE31FD79DD300ACFDCF /* DNAUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DNAUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D00BFCE71FD79DD300ACFDCF /* DNAUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNAUITests.swift; sourceTree = "<group>"; };
 		D00BFCE91FD79DD300ACFDCF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D06D07321FE86CBD00C910E4 /* plant.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = plant.mov; sourceTree = "<group>"; };
 		D06D07341FE8716600C910E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,7 +103,6 @@
 				D06D07341FE8716600C910E4 /* Main.storyboard */,
 				D00BFCD01FD79DD300ACFDCF /* LaunchScreen.storyboard */,
 				D00BFCD31FD79DD300ACFDCF /* Info.plist */,
-				D06D07321FE86CBD00C910E4 /* plant.mov */,
 			);
 			path = DNA;
 			sourceTree = "<group>";
@@ -237,7 +234,6 @@
 			files = (
 				D06D07351FE8716600C910E4 /* Main.storyboard in Resources */,
 				D00BFCD21FD79DD300ACFDCF /* LaunchScreen.storyboard in Resources */,
-				D06D07331FE86CBD00C910E4 /* plant.mov in Resources */,
 				D00BFCCF1FD79DD300ACFDCF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

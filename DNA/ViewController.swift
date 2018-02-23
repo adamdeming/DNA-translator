@@ -9,47 +9,6 @@ import Foundation
 import UIKit
 import AVFoundation
 
-extension String {
-    func indicesOf(string: String) -> [Int] {
-        var indices = [Int]()
-        var searchStartIndex = self.startIndex
-        
-        while searchStartIndex < self.endIndex,
-            let range = self.range(of: string, range: searchStartIndex..<self.endIndex),
-            !range.isEmpty
-        {
-            let index = distance(from: self.startIndex, to: range.lowerBound)
-            indices.append(index)
-            searchStartIndex = range.upperBound
-        }
-        
-        return indices
-    }
-}
-
-extension String
-{
-    func containsNumbers() -> Bool
-    {
-        let numberRegEx  = ".*[0-9]+.*"
-        let testCase     = NSPredicate(format:"SELF MATCHES %@", numberRegEx)
-        return testCase.evaluate(with: self)
-    }
-}
-
-// Bottom Border TextField Extension
-extension UITextField {
-    func setBottomBorder() {
-        self.borderStyle = .none
-        self.layer.backgroundColor = UIColor.white.cgColor
-        
-        self.layer.masksToBounds = false
-        self.layer.shadowColor = UIColor.lightGray.cgColor
-        self.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
-        self.layer.shadowOpacity = 1.0
-        self.layer.shadowRadius = 0.0
-    }
-}
 
 
 class ViewController: UIViewController, UITextFieldDelegate {
@@ -64,6 +23,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var countLabel1: UILabel!
     @IBOutlet weak var countLabel2: UILabel!
     @IBOutlet weak var complementButtonOutlet: UIButton!
+
+    @IBOutlet weak var mainView: UIView!
+    @IBOutlet weak var leadingC: NSLayoutConstraint!
+    @IBOutlet weak var trailingC: NSLayoutConstraint!
+    
+    var menuIsVisible = false
     
     
     // Video Background
@@ -100,44 +65,44 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         // TextField UI Setup
         textField.frame = CGRect(x: 40, y: height * 0.2, width: width-80, height: textField.frame.height)
-        view.addSubview(textField)
+        mainView.addSubview(textField)
         
         textField2.frame = CGRect(x: 40, y: height * 0.4, width: width-80, height: textField2.frame.height)
-        view.addSubview(textField)
+        mainView.addSubview(textField)
         
         textField.setBottomBorder()
         textField2.setBottomBorder()
         
         // Count Label UI Setup
         countLabel1.frame = CGRect(x: 40, y: textField.frame.origin.y + 40, width: countLabel1.frame.width, height: countLabel1.frame.height)
-        view.addSubview(countLabel1)
+        mainView.addSubview(countLabel1)
         countLabel1.text = "0"
         countLabel2.frame = CGRect(x: 40, y: textField2.frame.origin.y + 40, width: countLabel2.frame.width, height: countLabel2.frame.height)
-        view.addSubview(countLabel2)
+        mainView.addSubview(countLabel2)
         countLabel2.text = "0"
         
         // Button UI Setup
         transcribeButtonOutlet.frame = CGRect(x: (width / 2) - (transcribeButtonOutlet.frame.size.width/2), y: textField.frame.origin.y + 40, width: transcribeButtonOutlet.frame.width, height: transcribeButtonOutlet.frame.height)
-        view.addSubview(transcribeButtonOutlet)
+        mainView.addSubview(transcribeButtonOutlet)
         
         translateButtonOutlet.frame = CGRect(x: (width / 2) - (translateButtonOutlet.frame.size.width/2), y: textField2.frame.origin.y + 40, width: translateButtonOutlet.frame.width, height: translateButtonOutlet.frame.height)
-        view.addSubview(translateButtonOutlet)
+        mainView.addSubview(translateButtonOutlet)
         
         complementButtonOutlet.frame = CGRect(x: (width-40) - complementButtonOutlet.frame.size.width, y: textField.frame.origin.y + 40, width: complementButtonOutlet.frame.width, height: complementButtonOutlet.frame.height)
-        view.addSubview(singleLetterAminoAcidOutlet)
+        mainView.addSubview(singleLetterAminoAcidOutlet)
 
         singleLetterAminoAcidOutlet.isHidden = true
         singleLetterAminoAcidOutlet.frame = CGRect(x: (width-40) - singleLetterAminoAcidOutlet.frame.size.width, y: textField2.frame.origin.y + 40, width: singleLetterAminoAcidOutlet.frame.width, height: singleLetterAminoAcidOutlet.frame.height)
-        view.addSubview(singleLetterAminoAcidOutlet)
+        mainView.addSubview(singleLetterAminoAcidOutlet)
         
         // Label UI Setup
         labelTranslated.frame = CGRect(x: 40, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.height)
-        view.addSubview(labelTranslated)
+        mainView.addSubview(labelTranslated)
         
         
         // Tap View to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
-        view.addGestureRecognizer(tap)
+        mainView.addGestureRecognizer(tap)
         
         // Set textfield delegate for return key dismiss
         self.textField.delegate = self
@@ -350,7 +315,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             }
 
         }
-
+        
     }
     
     // Return key tapped hides keyboard
@@ -364,8 +329,66 @@ class ViewController: UIViewController, UITextFieldDelegate {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
-    
 
-    
+    @IBAction func menuAction(_ sender: Any) {
+        
+        if !menuIsVisible {
+            leadingC.constant = 150
+            trailingC.constant = -150
+            menuIsVisible = true
+        } else {
+            leadingC.constant = 0
+            trailingC.constant = 0
+            menuIsVisible = false
+        }
+        
+        UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseIn, animations: { self.view.layoutIfNeeded()
+        }) { (animationComplete) in
+            print("The animation is complete!")
+        }
+
+    }
+}
+
+extension String {
+    func indicesOf(string: String) -> [Int] {
+        var indices = [Int]()
+        var searchStartIndex = self.startIndex
+        
+        while searchStartIndex < self.endIndex,
+            let range = self.range(of: string, range: searchStartIndex..<self.endIndex),
+            !range.isEmpty
+        {
+            let index = distance(from: self.startIndex, to: range.lowerBound)
+            indices.append(index)
+            searchStartIndex = range.upperBound
+        }
+        
+        return indices
+    }
+}
+
+extension String
+{
+    func containsNumbers() -> Bool
+    {
+        let numberRegEx  = ".*[0-9]+.*"
+        let testCase     = NSPredicate(format:"SELF MATCHES %@", numberRegEx)
+        return testCase.evaluate(with: self)
+    }
+}
+
+// Bottom Border TextField Extension
+extension UITextField {
+    func setBottomBorder() {
+        self.borderStyle = .none
+        self.layer.backgroundColor = UIColor.white.cgColor
+        
+        self.layer.masksToBounds = false
+        self.layer.shadowColor = UIColor.lightGray.cgColor
+        self.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+        self.layer.shadowOpacity = 1.0
+        self.layer.shadowRadius = 0.0
+    }
 }
 
