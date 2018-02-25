@@ -29,6 +29,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var trailingC: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navBar: UINavigationItem!
+    @IBOutlet weak var menuButton: UIBarButtonItem!
     
     
     var menuIsVisible = false
@@ -41,8 +42,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     var width: CGFloat!
     var height: CGFloat!
     
-    let cellReuseIdentifier = "cell"
-    var threeLetterArray = [String]()
+
+    var historyAminoArray = [String]()
+    var historyArrayDNA = [String]()
+    var historyArrayRNA = [String]()
+
+    var navTitle = UILabel()
+    
+    let defaults = UserDefaults.standard
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,7 +74,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //            self.player?.play()
 //        }
 //        view.layer.insertSublayer(playerLayer, at: 0)
-        
+
         // TextField UI Setup
         textField.frame = CGRect(x: 40, y: height * 0.1, width: width-80, height: textField.frame.height)
         mainView.addSubview(textField)
@@ -122,16 +130,33 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         self.view.addGestureRecognizer(swipeRight)
         
         // Table View Delegate
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
-        tableView.delegate = self
-        tableView.dataSource = self
-        
-//        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-//        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-//        blurEffectView.frame = tableView.bounds
-//        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//        tableView.addSubview(blurEffectView)
+//        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 
+    //        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
+    //        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+    //        blurEffectView.frame = tableView.bounds
+    //        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    //        tableView.addSubview(blurEffectView)
+
+        navTitle.text = "history"
+        navTitle.sizeToFit()
+        navTitle.isHidden = true
+        navTitle.textColor = UIColor.darkGray
+        
+        let historyBarButtonItem = UIBarButtonItem(customView: navTitle)
+        historyBarButtonItem.tintColor = UIColor.lightGray
+        self.navigationItem.leftBarButtonItems = [menuButton, historyBarButtonItem]
+        
+         let savedHistoryArray = defaults.array(forKey: "historyAminoArrayKey") as? [String] ?? [String]()
+        print("SavedHistoryArray:\(savedHistoryArray)")
+        
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tableView.reloadData()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -272,10 +297,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         // Return Keyboard
         textFieldShouldReturn(textField2)
         
+
         // Update History Table View
-        threeLetterArray.insert(labelTranslated.text!, at: 0)
-        threeLetterArray = threeLetterArray.filter { $0 != "" }
-        print("HistoryArray: \(threeLetterArray)")
+        historyAminoArray.insert(labelTranslated.text!, at: 0)
+        historyAminoArray = historyAminoArray.filter { $0 != "" }
+        historyArrayDNA.insert(textField.text!, at: 0)
+        historyArrayRNA.insert(textField2.text!, at: 0)
+
+        // Save Value
+        defaults.set(historyAminoArray, forKey: "historyAminoArrayKey") //setObject
+        defaults.set(historyArrayDNA, forKey: "DNAKey")
+        defaults.set(historyArrayRNA, forKey: "RNAKey")
+        defaults.synchronize()
+        
+        if historyAminoArray.count == 0 {
+            historyArrayRNA.removeAll()
+            historyArrayDNA.removeAll()
+        }
+    
+        print("HistoryArray: \(historyAminoArray)")
         tableView.reloadData()
   }
     
@@ -301,6 +341,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                             print("Complementary DNA")
                         }
                     }
+        
         
         
     }
@@ -363,18 +404,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBAction func menuAction(_ sender: Any) {
         
         if !menuIsVisible {
-            leadingC.constant = 500
-            trailingC.constant = -500
+            leadingC.constant = 350
+            trailingC.constant = -350
             countLabel1.isHidden = true
             countLabel2.isHidden = true
-            navBar.title = "history"
+            navTitle.isHidden = false
             menuIsVisible = true
         } else {
             leadingC.constant = 0
             trailingC.constant = 0
             countLabel1.isHidden = false
             countLabel2.isHidden = false
-            navBar.title = ""
+            navTitle.isHidden = true
             menuIsVisible = false
         }
         
@@ -391,7 +432,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         if gesture.direction == UISwipeGestureRecognizerDirection.right {
             print("Swipe Right")
             self.menuAction((Any).self)
-            
+
         }
         else if gesture.direction == UISwipeGestureRecognizerDirection.left {
             print("Swipe Left")
@@ -399,23 +440,28 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             self.menuAction((Any).self)
             }
         }
-  
+        
     }
 
-    
     // number of rows in table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.threeLetterArray.count
+        let savedHistoryArray = defaults.object(forKey: "historyAminoArrayKey") as? [String] ?? [String]()
+
+        return savedHistoryArray.count
     }
     
     // create a cell for each table view row
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         // create a new cell if needed or reuse an old one
-        let cell:UITableViewCell = self.tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as UITableViewCell!
+        let cellReuseIdentifier = "cell"
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
         
         // set the text from the data model
-        cell.textLabel?.text = self.threeLetterArray[indexPath.row]
+//        historyAminoArray = UserDefaults.standard.array(forKey: "historyArrayKey") as! [String]
+        let savedHistoryArray = defaults.object(forKey: "historyAminoArrayKey") as? [String] ?? [String]()
+        cell.textLabel?.text = savedHistoryArray[indexPath.row]
+        
         
         return cell
     }
@@ -423,9 +469,41 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     // method to run when table view cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("You tapped cell number \(indexPath.row).")
+        
+        let savedHistoryArray = defaults.array(forKey: "historyAminoArrayKey") as? [String] ?? [String]()
+        let savedDNAHistoryArray = defaults.array(forKey: "DNAKey") as? [String] ?? [String]()
+        let savedRNAHistoryArray = defaults.array(forKey: "RNAKey") as? [String] ?? [String]()
+        
+        labelTranslated.text = savedHistoryArray[indexPath.row]
+        textField.text = savedDNAHistoryArray[indexPath.row]
+        textField2.text = savedRNAHistoryArray[indexPath.row]
     }
     
-    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            print("Deleted")
+
+            var savedHistoryArray = defaults.array(forKey: "historyAminoArrayKey") as? [String] ?? [String]()
+            var savedDNAHistoryArray = defaults.array(forKey: "DNAKey") as? [String] ?? [String]()
+            var savedRNAHistoryArray = defaults.array(forKey: "RNAKey") as? [String] ?? [String]()
+            
+            savedHistoryArray.remove(at: indexPath.row)
+            savedRNAHistoryArray.remove(at: indexPath.row)
+            savedDNAHistoryArray.remove(at: indexPath.row)
+            historyAminoArray = savedHistoryArray
+            defaults.set(savedHistoryArray, forKey: "historyAminoArrayKey")
+            defaults.set(savedHistoryArray, forKey: "DNAKey")
+            defaults.set(savedHistoryArray, forKey: "RNAKey")
+            defaults.synchronize()
+            
+            tableView.reloadData()
+            
+            print("SAVEDHistory\(savedHistoryArray)")
+//            print("SAVEDDNA\(savedDNAHistoryArray)")
+//            print("SAVEDRNA\(savedRNAHistoryArray)")
+        }
+    }
+
     
 }
 
