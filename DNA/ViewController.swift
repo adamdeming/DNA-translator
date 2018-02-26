@@ -223,7 +223,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
         // Letters that aren't G,C,A,T
         let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","U","V","W","X","Y","Z"]
-        print(nonNucleotideLetters.count)
         
         for letter in nonNucleotideLetters {
             if textField.text!.contains(letter) || textField.text!.containsNumbers() {
@@ -287,9 +286,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         var RNA = ""
         var checkRNA = ""
         
-        // Letters that aren't G,C,A,T
+        // Letters that aren't G,C,A,U
         let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","T","W","X","Y","Z"]
-        print(nonNucleotideLetters.count)
         
         for letter in nonNucleotideLetters {
             if textField2.text!.contains(letter) || textField2.text!.containsNumbers() {
@@ -364,6 +362,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
   }
     
     @IBAction func complementButton(_ sender: Any) {
+        
+        // Letters that aren't G,C,A,T
+        let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","U","V","W","X","Y","Z"]
+        
+        for letter in nonNucleotideLetters {
+            if textField.text!.contains(letter) || textField.text!.containsNumbers() {
+                textField.text = "Nucleotide not recognized"
+                //complementaryRNA = ""
+                textField2.text = ""
+                labelTranslated.text = ""
+                countLabel1.text = "0"
+                countLabel2.text = "0"
+            }
+        }
+        
         var complementString = ""
         
         // complementary mRNA transcription
@@ -517,7 +530,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         countLabel1.text = "\(textField.text!.count)"
         countLabel2.text = "\(textField2.text!.count)"
-        
+        textField.reloadInputViews()
+        textField2.reloadInputViews()
         
         handleGesture(gesture: UISwipeGestureRecognizer.init())
     }
