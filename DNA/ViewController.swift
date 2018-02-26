@@ -30,7 +30,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navBar: UINavigationItem!
     @IBOutlet weak var menuButton: UIBarButtonItem!
-    
+
     
     var menuIsVisible = false
     
@@ -42,18 +42,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     var width: CGFloat!
     var height: CGFloat!
     
-
-    var historyAminoArray = [String]()
+    
     var historyArrayDNA = [String]()
     var historyArrayRNA = [String]()
-
+    var tableViewArray = [String]()
     var navTitle = UILabel()
     
     let defaults = UserDefaults.standard
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view, typically from a nib.
         
         //create variables to simplify the positioning with fractions code
@@ -147,16 +147,35 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         let historyBarButtonItem = UIBarButtonItem(customView: navTitle)
         historyBarButtonItem.tintColor = UIColor.lightGray
         self.navigationItem.leftBarButtonItems = [menuButton, historyBarButtonItem]
+        if (defaults.value(forKey: "historyAmino") != nil) {
+            tableViewArray = (defaults.array(forKey: "historyAmino") as? [String])!
+            historyArrayDNA = (defaults.array(forKey: "historyDNA") as? [String])!
+            historyArrayRNA = (defaults.array(forKey: "historyRNA") as? [String])!
+        } else {
+            tableViewArray = []
+            historyArrayDNA = []
+            historyArrayRNA = []
+            defaults.set(tableViewArray, forKey: "historyAmino") //setObject
+            defaults.set(historyArrayDNA, forKey: "historyDNA")
+            defaults.set(historyArrayRNA, forKey: "historyRNA")
+            defaults.synchronize()
+        }
+        tableView.reloadData()
+
+        // Gets Rid of Naviagation Bar Line
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
         
-         let savedHistoryArray = defaults.array(forKey: "historyAminoArrayKey") as? [String] ?? [String]()
-        print("SavedHistoryArray:\(savedHistoryArray)")
-        
-        
+//        // Uncomment to clear NSUserDefaults
+//        defaults.removeObject(forKey: "historyAminoArrayKey")
+//        defaults.removeObject(forKey: "DNAKey")
+//        defaults.removeObject(forKey: "RNAKey")
+    
     }
     
     override func viewDidAppear(_ animated: Bool) {
+
         super.viewDidAppear(animated)
-        tableView.reloadData()
     }
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -299,23 +318,22 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
 
         // Update History Table View
-        historyAminoArray.insert(labelTranslated.text!, at: 0)
-        historyAminoArray = historyAminoArray.filter { $0 != "" }
+        tableViewArray.insert(labelTranslated.text!, at: 0)
+        tableViewArray = tableViewArray.filter { $0 != "" }
         historyArrayDNA.insert(textField.text!, at: 0)
         historyArrayRNA.insert(textField2.text!, at: 0)
 
         // Save Value
-        defaults.set(historyAminoArray, forKey: "historyAminoArrayKey") //setObject
-        defaults.set(historyArrayDNA, forKey: "DNAKey")
-        defaults.set(historyArrayRNA, forKey: "RNAKey")
+        defaults.set(tableViewArray, forKey: "historyAmino") //setObject
+        defaults.set(historyArrayDNA, forKey: "historyDNA")
+        defaults.set(historyArrayRNA, forKey: "historyRNA")
         defaults.synchronize()
         
-        if historyAminoArray.count == 0 {
+        if tableViewArray.count == 0 {
             historyArrayRNA.removeAll()
             historyArrayDNA.removeAll()
         }
     
-        print("HistoryArray: \(historyAminoArray)")
         tableView.reloadData()
   }
     
@@ -445,9 +463,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
     // number of rows in table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let savedHistoryArray = defaults.object(forKey: "historyAminoArrayKey") as? [String] ?? [String]()
-
-        return savedHistoryArray.count
+        
+        return tableViewArray.count
     }
     
     // create a cell for each table view row
@@ -459,8 +476,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         // set the text from the data model
 //        historyAminoArray = UserDefaults.standard.array(forKey: "historyArrayKey") as! [String]
-        let savedHistoryArray = defaults.object(forKey: "historyAminoArrayKey") as? [String] ?? [String]()
-        cell.textLabel?.text = savedHistoryArray[indexPath.row]
+        cell.textLabel?.text = tableViewArray[indexPath.row]
         
         
         return cell
@@ -470,37 +486,27 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("You tapped cell number \(indexPath.row).")
         
-        let savedHistoryArray = defaults.array(forKey: "historyAminoArrayKey") as? [String] ?? [String]()
-        let savedDNAHistoryArray = defaults.array(forKey: "DNAKey") as? [String] ?? [String]()
-        let savedRNAHistoryArray = defaults.array(forKey: "RNAKey") as? [String] ?? [String]()
         
-        labelTranslated.text = savedHistoryArray[indexPath.row]
-        textField.text = savedDNAHistoryArray[indexPath.row]
-        textField2.text = savedRNAHistoryArray[indexPath.row]
+        labelTranslated.text = tableViewArray[indexPath.row]
+        textField.text = historyArrayDNA[indexPath.row]
+        textField2.text = historyArrayRNA[indexPath.row]
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             print("Deleted")
-
-            var savedHistoryArray = defaults.array(forKey: "historyAminoArrayKey") as? [String] ?? [String]()
-            var savedDNAHistoryArray = defaults.array(forKey: "DNAKey") as? [String] ?? [String]()
-            var savedRNAHistoryArray = defaults.array(forKey: "RNAKey") as? [String] ?? [String]()
             
-            savedHistoryArray.remove(at: indexPath.row)
-            savedRNAHistoryArray.remove(at: indexPath.row)
-            savedDNAHistoryArray.remove(at: indexPath.row)
-            historyAminoArray = savedHistoryArray
-            defaults.set(savedHistoryArray, forKey: "historyAminoArrayKey")
-            defaults.set(savedHistoryArray, forKey: "DNAKey")
-            defaults.set(savedHistoryArray, forKey: "RNAKey")
+            tableViewArray.remove(at: indexPath.row)
+            historyArrayRNA.remove(at: indexPath.row)
+            historyArrayDNA.remove(at: indexPath.row)
+            
+            defaults.set(tableViewArray, forKey: "historyAmino")
+            defaults.set(historyArrayDNA, forKey: "historyDNA")
+            defaults.set(historyArrayRNA, forKey: "historyRNA")
             defaults.synchronize()
             
             tableView.reloadData()
-            
-            print("SAVEDHistory\(savedHistoryArray)")
-//            print("SAVEDDNA\(savedDNAHistoryArray)")
-//            print("SAVEDRNA\(savedRNAHistoryArray)")
+
         }
     }
 
