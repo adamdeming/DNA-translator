@@ -170,7 +170,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //        defaults.removeObject(forKey: "historyAminoArrayKey")
 //        defaults.removeObject(forKey: "DNAKey")
 //        defaults.removeObject(forKey: "RNAKey")
-    
+        
+        // Listeners for Clear Button Clicked
+        textField.addTarget(self, action: #selector(textFieldListener(textField:)), for: UIControlEvents.allEditingEvents)
+        textField2.addTarget(self, action: #selector(textFieldListener(textField:)), for: UIControlEvents.allEditingEvents)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -186,6 +190,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         // Dispose of any resources that can be recreated.
     }
     
+    @objc func textFieldListener(textField: UITextField) {
+        if textField.text == "" {
+            textField2.text = ""
+            labelTranslated.text = ""
+        }
+    }
+    
+    @objc func textField2ClearButton(textField: UITextField) {
+        if textField2.text == "" {
+            textField.text = ""
+            labelTranslated.text = ""
+        }
+    }
     
     @IBAction func transcribeButton(_ sender: Any) {
 
