@@ -173,12 +173,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         // Listeners for Clear Button Clicked
         textField.addTarget(self, action: #selector(textFieldListener(textField:)), for: UIControlEvents.allEditingEvents)
-        textField2.addTarget(self, action: #selector(textFieldListener(textField:)), for: UIControlEvents.allEditingEvents)
+        textField2.addTarget(self, action: #selector(textField2Listener(textField2:)), for: UIControlEvents.allEditingEvents)
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
-
         super.viewDidAppear(animated)
     }
 
@@ -191,16 +190,26 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     @objc func textFieldListener(textField: UITextField) {
+        countLabel1.text = "\(textField.text?.count ?? 0)"
+        
         if textField.text == "" {
-            textField2.text = ""
             labelTranslated.text = ""
+            countLabel1.text = "0"
+        }
+        if tableViewArray.isEmpty {
+            countLabel1.text = "0"
         }
     }
     
-    @objc func textField2ClearButton(textField: UITextField) {
+    @objc func textField2Listener(textField2: UITextField) {
+        countLabel2.text = "\(textField2.text?.count ?? 0)"
+        
         if textField2.text == "" {
-            textField.text = ""
             labelTranslated.text = ""
+            countLabel2.text = "0"
+        }
+        if tableViewArray.isEmpty {
+            countLabel2.text = "0"
         }
     }
     
@@ -495,7 +504,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //        historyAminoArray = UserDefaults.standard.array(forKey: "historyArrayKey") as! [String]
         cell.textLabel?.text = tableViewArray[indexPath.row]
         
-        
         return cell
     }
     
@@ -503,10 +511,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("You tapped cell number \(indexPath.row).")
         
-        
         labelTranslated.text = tableViewArray[indexPath.row]
         textField.text = historyArrayDNA[indexPath.row]
         textField2.text = historyArrayRNA[indexPath.row]
+        
+        countLabel1.text = "\(textField.text!.count)"
+        countLabel2.text = "\(textField2.text!.count)"
+        
+        
+        handleGesture(gesture: UISwipeGestureRecognizer.init())
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -516,7 +529,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             tableViewArray.remove(at: indexPath.row)
             historyArrayRNA.remove(at: indexPath.row)
             historyArrayDNA.remove(at: indexPath.row)
-            
+            textField.text = ""
+            textField2.text = ""
+            labelTranslated.text = ""
             defaults.set(tableViewArray, forKey: "historyAmino")
             defaults.set(historyArrayDNA, forKey: "historyDNA")
             defaults.set(historyArrayRNA, forKey: "historyRNA")
