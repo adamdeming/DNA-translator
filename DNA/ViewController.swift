@@ -30,10 +30,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navBar: UINavigationItem!
     @IBOutlet weak var menuButton: UIBarButtonItem!
-
+    
+    @IBOutlet weak var stepper: UIStepper!
+    @IBOutlet weak var readingFrameValueLabel: UILabel!
     
     var menuIsVisible = false
-    
+    var subIndex = 0
+    var originalString = ""
     // Video Background
     var player: AVPlayer!
     var playerLayer: AVPlayerLayer!
@@ -76,41 +79,46 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //        view.layer.insertSublayer(playerLayer, at: 0)
 
         // TextField UI Setup
-        textField.frame = CGRect(x: 40, y: height * 0.1, width: width-80, height: textField.frame.height)
+        textField.frame = CGRect(x: 40, y: height * 0.1, width: width-80, height: textField.frame.size.height)
         mainView.addSubview(textField)
         
-        textField2.frame = CGRect(x: 40, y: height * 0.3, width: width-80, height: textField2.frame.height)
+        textField2.frame = CGRect(x: 40, y: height * 0.3, width: width-80, height: textField2.frame.size.height)
         mainView.addSubview(textField)
         
         textField.setBottomBorder()
         textField2.setBottomBorder()
         
         // Count Label UI Setup
-        countLabel1.frame = CGRect(x: 40, y: textField.frame.origin.y + 40, width: countLabel1.frame.width, height: countLabel1.frame.height)
+        countLabel1.frame = CGRect(x: 40, y: textField.frame.origin.y + 40, width: countLabel1.frame.size.width, height: countLabel1.frame.size.height)
         mainView.addSubview(countLabel1)
         countLabel1.text = "0"
-        countLabel2.frame = CGRect(x: 40, y: textField2.frame.origin.y + 40, width: countLabel2.frame.width, height: countLabel2.frame.height)
+        countLabel2.frame = CGRect(x: 40, y: textField2.frame.origin.y + 40, width: countLabel2.frame.size.width, height: countLabel2.frame.size.height)
         mainView.addSubview(countLabel2)
         countLabel2.text = "0"
         
         // Button UI Setup
-        transcribeButtonOutlet.frame = CGRect(x: (width / 2) - (transcribeButtonOutlet.frame.size.width/2), y: textField.frame.origin.y + 40, width: transcribeButtonOutlet.frame.width, height: transcribeButtonOutlet.frame.height)
+        transcribeButtonOutlet.frame = CGRect(x: (width / 2) - (transcribeButtonOutlet.frame.size.width/2), y: textField.frame.origin.y + 40, width: transcribeButtonOutlet.frame.size.width, height: transcribeButtonOutlet.frame.size.height)
         mainView.addSubview(transcribeButtonOutlet)
         
-        translateButtonOutlet.frame = CGRect(x: (width / 2) - (translateButtonOutlet.frame.size.width/2), y: textField2.frame.origin.y + 40, width: translateButtonOutlet.frame.width, height: translateButtonOutlet.frame.height)
+        translateButtonOutlet.frame = CGRect(x: (width / 2) - (translateButtonOutlet.frame.size.width/2), y: textField2.frame.origin.y + 40, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
         mainView.addSubview(translateButtonOutlet)
         
-        complementButtonOutlet.frame = CGRect(x: (width-40) - complementButtonOutlet.frame.size.width, y: textField.frame.origin.y + 40, width: complementButtonOutlet.frame.width, height: complementButtonOutlet.frame.height)
+        complementButtonOutlet.frame = CGRect(x: (width-40) - complementButtonOutlet.frame.size.width, y: textField.frame.origin.y + 40, width: complementButtonOutlet.frame.size.width, height: complementButtonOutlet.frame.size.height)
         mainView.addSubview(singleLetterAminoAcidOutlet)
 
         singleLetterAminoAcidOutlet.isHidden = true
-        singleLetterAminoAcidOutlet.frame = CGRect(x: (width-40) - singleLetterAminoAcidOutlet.frame.size.width, y: textField2.frame.origin.y + 40, width: singleLetterAminoAcidOutlet.frame.width, height: singleLetterAminoAcidOutlet.frame.height)
+        singleLetterAminoAcidOutlet.frame = CGRect(x: (width-40) - singleLetterAminoAcidOutlet.frame.size.width, y: textField2.frame.origin.y + 40, width: singleLetterAminoAcidOutlet.frame.size.width, height: singleLetterAminoAcidOutlet.frame.size.height)
         mainView.addSubview(singleLetterAminoAcidOutlet)
         
+        stepper.frame = CGRect(x: 40, y: textField2.frame.origin.y + 100 , width: stepper.frame.size.width, height: stepper.frame.size.height)
+        mainView.addSubview(stepper)
+        
         // Label UI Setup
-        labelTranslated.frame = CGRect(x: 40, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.height)
+        labelTranslated.frame = CGRect(x: 40, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.size.height)
         mainView.addSubview(labelTranslated)
         
+        readingFrameValueLabel.frame = CGRect(x: 40, y: stepper.frame.origin.y + 30, width: readingFrameValueLabel.frame.size.width, height: readingFrameValueLabel.frame.size.height)
+        mainView.addSubview(readingFrameValueLabel)
         
         // Tap View to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
@@ -174,6 +182,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         // Listeners for Clear Button Clicked
         textField.addTarget(self, action: #selector(textFieldListener(textField:)), for: UIControlEvents.allEditingEvents)
         textField2.addTarget(self, action: #selector(textField2Listener(textField2:)), for: UIControlEvents.allEditingEvents)
+        
+        // Stepper Setup
+//        stepper.autorepeat = true
         
     }
     
@@ -258,9 +269,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
     }
     
-
+    var isAction = true
     @IBAction func translateButton(_ sender: Any) {
-    
+
+        if isAction == true {
+            subIndex = 0
+            stepper.value = 0
+            originalString = textField2.text!
+        }
         countLabel2.text = "\(textField2.text!.count)"
         
         var codonTable = [
@@ -300,14 +316,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             }
         }
         
-        for i in textField2.text! {
-            rnaSequenceDebug.append(String(i))
-            checkRNA.append(String(i))
+        for element in textField2.text! {
             numberOfCharacters += 1
             print(numberOfCharacters)
-            
-            if numberOfCharacters % 3 == 0 {
 
+            rnaSequenceDebug.append(String(element))
+            checkRNA.append(String(element))
+            
+             if numberOfCharacters % 3 == 0 {
+                
                 rnaSequenceDebug.append("---")
                 print(rnaSequenceDebug)
 
@@ -359,6 +376,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
     
         tableView.reloadData()
+        isAction = true
   }
     
     @IBAction func complementButton(_ sender: Any) {
@@ -369,7 +387,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         for letter in nonNucleotideLetters {
             if textField.text!.contains(letter) || textField.text!.containsNumbers() {
                 textField.text = "Nucleotide not recognized"
-                //complementaryRNA = ""
                 textField2.text = ""
                 labelTranslated.text = ""
                 countLabel1.text = "0"
@@ -554,6 +571,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             tableView.reloadData()
 
         }
+    }
+
+    @IBAction func stepperRFValueChanged(_ sender: UIStepper) {
+        isAction = false
+        var  index = Int(sender.value)
+        readingFrameValueLabel.text = "reading frame: \(Int(sender.value))"
+        
+        let strIndex = originalString.index(originalString.startIndex, offsetBy: index-1)
+        let strI = originalString.suffix(from: strIndex)
+        let newString = String(originalString.suffix(from: strIndex))
+        textField2.text = newString
+        
+        translateButton(self.translateButtonOutlet)
+    
+        
     }
 
     

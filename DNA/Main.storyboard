@@ -139,6 +139,21 @@
                                             <action selector="transcribeButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PqW-BG-1fE"/>
                                         </connections>
                                     </button>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="3" translatesAutoresizingMaskIntoConstraints="NO" id="D5v-Tk-e7O">
+                                        <rect key="frame" x="199" y="467" width="94" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                        <connections>
+                                            <action selector="stepperRFValueChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="5HU-Ac-XKe"/>
+                                        </connections>
+                                    </stepper>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="reading frame: 1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a3b-kq-GVL">
+                                        <rect key="frame" x="195" y="510" width="128" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -173,7 +188,9 @@
                         <outlet property="mainView" destination="rRR-Ya-NnV" id="vbh-Zh-zWk"/>
                         <outlet property="menuButton" destination="g0s-J0-1mq" id="VCe-1V-hJ7"/>
                         <outlet property="navBar" destination="L1W-Nc-fhz" id="h6r-mu-hbc"/>
+                        <outlet property="readingFrameValueLabel" destination="a3b-kq-GVL" id="tef-Ce-O3w"/>
                         <outlet property="singleLetterAminoAcidOutlet" destination="J2g-IC-30G" id="Dvw-2Z-6J8"/>
+                        <outlet property="stepper" destination="D5v-Tk-e7O" id="Efh-KS-ARy"/>
                         <outlet property="tableView" destination="kWt-nx-zhy" id="U5u-Rs-7Iz"/>
                         <outlet property="textField" destination="k4B-Ha-efo" id="qZ9-tN-TmD"/>
                         <outlet property="textField2" destination="432-4D-LDP" id="Z7w-5J-KGi"/>
