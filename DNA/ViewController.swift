@@ -35,7 +35,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var readingFrameValueLabel: UILabel!
     
     var menuIsVisible = false
-    var subIndex = 0
     var originalString = ""
     // Video Background
     var player: AVPlayer!
@@ -215,6 +214,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @objc func textField2Listener(textField2: UITextField) {
         countLabel2.text = "\(textField2.text?.count ?? 0)"
         
+
+        
         if textField2.text == "" {
             labelTranslated.text = ""
             countLabel2.text = "0"
@@ -273,9 +274,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBAction func translateButton(_ sender: Any) {
 
         if isAction == true {
-            subIndex = 0
-            stepper.value = 0
             originalString = textField2.text!
+            stepper.value = 1
+            readingFrameValueLabel.text = "reading frame: 1"
         }
         countLabel2.text = "\(textField2.text!.count)"
         
@@ -581,10 +582,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         let strIndex = originalString.index(originalString.startIndex, offsetBy: index-1)
         let strI = originalString.suffix(from: strIndex)
         let newString = String(originalString.suffix(from: strIndex))
-        textField2.text = newString
         
+        textField2.text = newString
         translateButton(self.translateButtonOutlet)
-    
+        
         
     }
 
