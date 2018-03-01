@@ -48,10 +48,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     var historyArrayDNA = [String]()
     var historyArrayRNA = [String]()
     var tableViewArray = [String]()
-    var navTitle = UILabel()
+    let navTitle = UILabel()
+//    let editButton = UIButton()
     
     let defaults = UserDefaults.standard
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,19 +63,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         height = view.frame.height
         print("VIEW WIDTH: \(view.frame.width)")
         print("VIEW HEIGHT: \(view.frame.height)")
-        
-//        // Mov Background
-//        let URL = Bundle.main.url(forResource: "plant", withExtension: "mov")
-//        player = AVPlayer.init(url: URL!)
-//        playerLayer = AVPlayerLayer(player: player)
-//        playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-//        playerLayer.frame = view.layer.frame
-//        player.play()
-//        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { _ in
-//            self.player?.seek(to: kCMTimeZero)
-//            self.player?.play()
-//        }
-//        view.layer.insertSublayer(playerLayer, at: 0)
 
         // TextField UI Setup
         textField.frame = CGRect(x: 40, y: height * 0.1, width: width-80, height: textField.frame.size.height)
@@ -109,14 +96,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         singleLetterAminoAcidOutlet.frame = CGRect(x: (width-40) - singleLetterAminoAcidOutlet.frame.size.width, y: textField2.frame.origin.y + 40, width: singleLetterAminoAcidOutlet.frame.size.width, height: singleLetterAminoAcidOutlet.frame.size.height)
         mainView.addSubview(singleLetterAminoAcidOutlet)
         
-        stepper.frame = CGRect(x: 40, y: textField2.frame.origin.y + 100 , width: stepper.frame.size.width, height: stepper.frame.size.height)
-        mainView.addSubview(stepper)
-        
         // Label UI Setup
-        labelTranslated.frame = CGRect(x: 40, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.size.height)
+        labelTranslated.frame = CGRect(x: stepper.frame.origin.x + 100, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.size.height)
         mainView.addSubview(labelTranslated)
         
-        readingFrameValueLabel.frame = CGRect(x: 40, y: stepper.frame.origin.y + 30, width: readingFrameValueLabel.frame.size.width, height: readingFrameValueLabel.frame.size.height)
+        stepper.frame = CGRect(x: 40, y: textField2.frame.origin.y + 180 , width: stepper.frame.size.width, height: stepper.frame.size.height)
+        mainView.addSubview(stepper)
+
+        readingFrameValueLabel.frame = CGRect(x: 35, y: stepper.frame.origin.y + 30, width: readingFrameValueLabel.frame.size.width, height: readingFrameValueLabel.frame.size.height)
         mainView.addSubview(readingFrameValueLabel)
         
         // Tap View to dismiss keyboard
@@ -137,23 +124,30 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         self.view.addGestureRecognizer(swipeRight)
         
         // Table View Delegate
-//        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 
-    //        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.light)
-    //        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-    //        blurEffectView.frame = tableView.bounds
-    //        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-    //        tableView.addSubview(blurEffectView)
-
-        navTitle.text = "history"
-        navTitle.sizeToFit()
-        navTitle.isHidden = true
-        navTitle.textColor = UIColor.darkGray
+        // Set History Title
+//        navTitle.text = "history"
+//        navTitle.sizeToFit()
+//        navTitle.isHidden = true
+//        navTitle.frame = CGRect(x: 0, y: 0, width: 250, height: 30)
+//        navTitle.textColor = UIColor.darkGray
+       
         
-        let historyBarButtonItem = UIBarButtonItem(customView: navTitle)
-        historyBarButtonItem.tintColor = UIColor.lightGray
-        self.navigationItem.leftBarButtonItems = [menuButton, historyBarButtonItem]
+        // Clear Button
+
+//        editButton.setTitle("Edit", for: .normal)
+//        editButton.setTitleColor(UIColor.darkGray, for: .normal)
+//        editButton.isHidden = true
+
+        
+        // Bar Buttons
+//        let historyBarButtonItem = UIBarButtonItem(customView: editButtonItem)
+
+        
+        editButtonItem.tintColor = UIColor.darkGray
+        self.navigationItem.leftBarButtonItems = [menuButton]
+        
         if (defaults.value(forKey: "historyAmino") != nil) {
             tableViewArray = (defaults.array(forKey: "historyAmino") as? [String])!
             historyArrayDNA = (defaults.array(forKey: "historyDNA") as? [String])!
@@ -182,9 +176,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         textField.addTarget(self, action: #selector(textFieldListener(textField:)), for: UIControlEvents.allEditingEvents)
         textField2.addTarget(self, action: #selector(textField2Listener(textField2:)), for: UIControlEvents.allEditingEvents)
         
-        // Stepper Setup
-//        stepper.autorepeat = true
-        
+        stepper.isHidden = true
+        readingFrameValueLabel.isHidden = true
+
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -214,15 +208,22 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @objc func textField2Listener(textField2: UITextField) {
         countLabel2.text = "\(textField2.text?.count ?? 0)"
         
-
-        
         if textField2.text == "" {
             labelTranslated.text = ""
+            originalString = ""
+            stepper.isHidden = true
+            readingFrameValueLabel.isHidden = true
             countLabel2.text = "0"
+            stepper.isHidden = true
+        }
+        if textField2.text!.count > 0 {
+            stepper.isHidden = false
+            readingFrameValueLabel.isHidden = false
         }
         if tableViewArray.isEmpty {
             countLabel2.text = "0"
         }
+        
     }
     
     @IBAction func transcribeButton(_ sender: Any) {
@@ -267,6 +268,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
 
         textFieldShouldReturn(textField)
+    
+        
         
     }
     
@@ -275,8 +278,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
         if isAction == true {
             originalString = textField2.text!
-            stepper.value = 1
-            readingFrameValueLabel.text = "reading frame: 1"
         }
         countLabel2.text = "\(textField2.text!.count)"
         
@@ -354,17 +355,20 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
             labelTranslated.attributedText = attributedString
 
-
         // Return Keyboard
         textFieldShouldReturn(textField2)
         
+        // Unhide Stepper and Label
+        stepper.isHidden = false
+        readingFrameValueLabel.isHidden = false
 
         // Update History Table View
+        if stepper.value == 1 {
         tableViewArray.insert(labelTranslated.text!, at: 0)
         tableViewArray = tableViewArray.filter { $0 != "" }
         historyArrayDNA.insert(textField.text!, at: 0)
         historyArrayRNA.insert(textField2.text!, at: 0)
-
+            
         // Save Value
         defaults.set(tableViewArray, forKey: "historyAmino") //setObject
         defaults.set(historyArrayDNA, forKey: "historyDNA")
@@ -377,7 +381,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
     
         tableView.reloadData()
+        }
+        
         isAction = true
+        
+        
   }
     
     @IBAction func complementButton(_ sender: Any) {
@@ -485,6 +493,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             countLabel2.isHidden = true
             navTitle.isHidden = false
             menuIsVisible = true
+            print(tableViewArray.count)
+
+            navigationItem.leftBarButtonItems = [menuButton, editButtonItem]
+           
         } else {
             leadingC.constant = 0
             trailingC.constant = 0
@@ -492,6 +504,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             countLabel2.isHidden = false
             navTitle.isHidden = true
             menuIsVisible = false
+
+            navigationItem.leftBarButtonItems = [menuButton]
         }
         
         UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseIn, animations: { self.view.layoutIfNeeded()
@@ -551,7 +565,22 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         textField.reloadInputViews()
         textField2.reloadInputViews()
         
+        
+        stepper.isHidden = false
+        readingFrameValueLabel.isHidden = false
+        originalString = textField2.text!
+        stepper.value = 1
+        readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
+        
         handleGesture(gesture: UISwipeGestureRecognizer.init())
+    }
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        // Toggles the edit button state
+        super.setEditing(editing, animated: animated)
+        // Toggles the actual editing actions appearing on a table view
+        tableView.setEditing(editing, animated: true)
+        
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -564,19 +593,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             textField.text = ""
             textField2.text = ""
             labelTranslated.text = ""
+            originalString  = ""
+            countLabel1.text = "0"
+            countLabel2.text = "0"
+            stepper.value = 1
+            readingFrameValueLabel.isHidden = true
+            stepper.isHidden = true
             defaults.set(tableViewArray, forKey: "historyAmino")
             defaults.set(historyArrayDNA, forKey: "historyDNA")
             defaults.set(historyArrayRNA, forKey: "historyRNA")
             defaults.synchronize()
             
             tableView.reloadData()
-
         }
+        
     }
-
+    
     @IBAction func stepperRFValueChanged(_ sender: UIStepper) {
         isAction = false
-        var  index = Int(sender.value)
+        let  index = Int(sender.value)
         readingFrameValueLabel.text = "reading frame: \(Int(sender.value))"
         
         let strIndex = originalString.index(originalString.startIndex, offsetBy: index-1)
@@ -584,13 +619,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         let newString = String(originalString.suffix(from: strIndex))
         
         textField2.text = newString
+        
         translateButton(self.translateButtonOutlet)
-        
-        
+    
     }
-
     
 }
+
 
 extension String {
     func indicesOf(string: String) -> [Int] {

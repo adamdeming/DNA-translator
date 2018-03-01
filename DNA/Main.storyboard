@@ -148,9 +148,9 @@
                                         </connections>
                                     </stepper>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="reading frame: 1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a3b-kq-GVL">
-                                        <rect key="frame" x="195" y="510" width="128" height="35"/>
+                                        <rect key="frame" x="195" y="510" width="147" height="35"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -172,7 +172,8 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="L1W-Nc-fhz">
-                        <barButtonItem key="leftBarButtonItem" image="MenuButton" id="g0s-J0-1mq">
+                        <barButtonItem key="leftBarButtonItem" image="MenuButton" width="290" id="g0s-J0-1mq">
+                            <inset key="imageInsets" minX="0.0" minY="0.0" maxX="500" maxY="0.0"/>
                             <color key="tintColor" red="0.40779560804367065" green="0.40787053108215332" blue="0.40779092907905579" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="menuAction:" destination="BYZ-38-t0r" id="VWM-q2-wvG"/>
