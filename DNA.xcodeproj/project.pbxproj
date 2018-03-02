@@ -14,6 +14,7 @@
 		D00BFCDD1FD79DD300ACFDCF /* DNATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BFCDC1FD79DD300ACFDCF /* DNATests.swift */; };
 		D00BFCE81FD79DD300ACFDCF /* DNAUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D00BFCE71FD79DD300ACFDCF /* DNAUITests.swift */; };
 		D06D07351FE8716600C910E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D06D07341FE8716600C910E4 /* Main.storyboard */; };
+		D0FE832E2047A7970005658B /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0FE832D2047A7970005658B /* CollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		D00BFCE71FD79DD300ACFDCF /* DNAUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DNAUITests.swift; sourceTree = "<group>"; };
 		D00BFCE91FD79DD300ACFDCF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D06D07341FE8716600C910E4 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		D0FE832D2047A7970005658B /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			children = (
 				D00BFCC71FD79DD300ACFDCF /* AppDelegate.swift */,
 				D00BFCC91FD79DD300ACFDCF /* ViewController.swift */,
+				D0FE832D2047A7970005658B /* CollectionViewCell.swift */,
 				D00BFCCE1FD79DD300ACFDCF /* Assets.xcassets */,
 				D06D07341FE8716600C910E4 /* Main.storyboard */,
 				D00BFCD01FD79DD300ACFDCF /* LaunchScreen.storyboard */,
@@ -261,6 +264,7 @@
 			files = (
 				D00BFCCA1FD79DD300ACFDCF /* ViewController.swift in Sources */,
 				D00BFCC81FD79DD300ACFDCF /* AppDelegate.swift in Sources */,
+				D0FE832E2047A7970005658B /* CollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,7 @@ import AVFoundation
 
 
 
-class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
 
     // Outlets
     @IBOutlet weak var textField: UITextField!
@@ -34,6 +34,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var stepper: UIStepper!
     @IBOutlet weak var readingFrameValueLabel: UILabel!
     
+    @IBOutlet weak var collectionView: UICollectionView!
+    
+    
     var menuIsVisible = false
     var originalString = ""
     // Video Background
@@ -49,7 +52,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     var historyArrayRNA = [String]()
     var tableViewArray = [String]()
     let navTitle = UILabel()
-//    let editButton = UIButton()
+    
+    var collectionItems = [String]()
+    var collectionItemsSingleLetter = [String]()
+    
+    var isSingleLetter = false
+    var savedTextField2 = ""
+
     
     let defaults = UserDefaults.standard
     
@@ -99,12 +108,20 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         // Label UI Setup
         labelTranslated.frame = CGRect(x: stepper.frame.origin.x + 100, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.size.height)
         mainView.addSubview(labelTranslated)
+        labelTranslated.isHidden = true
+        
+        // Label UI Setup
+        collectionView.frame = CGRect(x: 40, y: textField2.frame.origin.y + 80 , width: width-80, height: collectionView.frame.size.height)
+        mainView.addSubview(collectionView)
+        collectionView.isHidden = true
         
         stepper.frame = CGRect(x: 40, y: textField2.frame.origin.y + 180 , width: stepper.frame.size.width, height: stepper.frame.size.height)
         mainView.addSubview(stepper)
+        stepper.isHidden = true
 
         readingFrameValueLabel.frame = CGRect(x: 35, y: stepper.frame.origin.y + 30, width: readingFrameValueLabel.frame.size.width, height: readingFrameValueLabel.frame.size.height)
         mainView.addSubview(readingFrameValueLabel)
+        readingFrameValueLabel.isHidden = true
         
         // Tap View to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
@@ -176,8 +193,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         textField.addTarget(self, action: #selector(textFieldListener(textField:)), for: UIControlEvents.allEditingEvents)
         textField2.addTarget(self, action: #selector(textField2Listener(textField2:)), for: UIControlEvents.allEditingEvents)
         
-        stepper.isHidden = true
-        readingFrameValueLabel.isHidden = true
 
     }
     
@@ -239,7 +254,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         for letter in nonNucleotideLetters {
             if textField.text!.contains(letter) || textField.text!.containsNumbers() {
-                textField.text = "Nucleotide not recognized"
+                textField.text = "Nucleotide sequence not recognized"
                 //complementaryRNA = ""
                 textField2.text = ""
                 labelTranslated.text = ""
@@ -278,6 +293,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
         if isAction == true {
             originalString = textField2.text!
+            
+            isAction = true
         }
         countLabel2.text = "\(textField2.text!.count)"
         
@@ -309,7 +326,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         for letter in nonNucleotideLetters {
             if textField2.text!.contains(letter) || textField2.text!.containsNumbers() {
-                textField2.text = "Nucleotide not recognized"
+                textField2.text = "Nucleotide sequence not recognized"
                 RNA = ""
                 textField.text = ""
                 labelTranslated.text = ""
@@ -317,6 +334,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                 countLabel2.text = "0"
             }
         }
+        
         
         for element in textField2.text! {
             numberOfCharacters += 1
@@ -336,7 +354,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                         RNA.append("-")
                         labelTranslated.text! = RNA
                         checkRNA.removeAll()
-                        singleLetterAminoAcidOutlet.isHidden = false
+//                        singleLetterAminoAcidOutlet.isHidden = false
                         print("TranslatedLabelCount: \(labelTranslated.text!.count)")
                     }
                 
@@ -383,8 +401,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         tableView.reloadData()
         }
         
-        isAction = true
         
+        collectionView.isHidden = false
+        
+        let labelWithoutDashes = labelTranslated.text!.components(separatedBy: "-")
+        collectionItems = labelWithoutDashes
+        print(collectionItems)
+
+        collectionView.reloadData()
+        
+        isSingleLetter = true
+        savedTextField2 = textField2.text!
         
   }
     
@@ -426,51 +453,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                     }
         
         
-        
     }
     
     var numberOfTaps = 0
-    @IBAction func singleLetterAminoAcidButton(_ sender: Any) {
 
-        let aminoDictionary = ["G":"Gly", "A":"Ala", "L":"Leu", "M":"Met", "F":"Phe", "W":"Trp", "K":"Lys", "Q":"Gln", "E":"Glu", "S":"Ser", "P":"Pro", "V":"Val", "I":"Ile", "C":"Cys", "Y":"Tyr", "H":"His", "R":"Arg", "N":"Asn", "D":"Asp", "T":"Thr"]
-        var aminoAcidString = ""
-        var checkAmino = ""
-        var numberOfLetters = 0
-        numberOfTaps+=1
-        
-        if numberOfTaps % 2 == 0 {
-            print("numberOfTaps:\(numberOfTaps) is even")
-            singleLetterAminoAcidOutlet.setTitle("single letter", for: .normal)
-            
-        } else {
-            print("numberOfTaps:\(numberOfTaps) is odd")
-            singleLetterAminoAcidOutlet.setTitle("three letter", for: .normal)
-        }
-        
-        let aminosWithoutDashes = labelTranslated.text!.replacingOccurrences(of: "-", with: "", options: NSString.CompareOptions.literal, range:nil)
-        
-        for n in aminosWithoutDashes {
-            numberOfLetters += 1
-            checkAmino.append(n)
-            
-            if numberOfLetters % 3 == 0 {
-                
-        for (singleLetter, threeLetter) in aminoDictionary {
-            if checkAmino == threeLetter  {
-                aminoAcidString.append(singleLetter)
-                aminoAcidString.append("-")
-                DispatchQueue.main.async{
-                self.labelTranslated.text! = aminoAcidString
-                }
-                checkAmino.removeAll()
-            }
-            
-                }
-            }
-
-        }
-        
-    }
     
     // Return key tapped hides keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -546,9 +532,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
         
         // set the text from the data model
-//        historyAminoArray = UserDefaults.standard.array(forKey: "historyArrayKey") as! [String]
         cell.textLabel?.text = tableViewArray[indexPath.row]
-        
+
         return cell
     }
     
@@ -564,7 +549,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         countLabel2.text = "\(textField2.text!.count)"
         textField.reloadInputViews()
         textField2.reloadInputViews()
-        
         
         stepper.isHidden = false
         readingFrameValueLabel.isHidden = false
@@ -610,8 +594,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     @IBAction func stepperRFValueChanged(_ sender: UIStepper) {
+        
+
         isAction = false
-        let  index = Int(sender.value)
+        let index = Int(sender.value)
         readingFrameValueLabel.text = "reading frame: \(Int(sender.value))"
         
         let strIndex = originalString.index(originalString.startIndex, offsetBy: index-1)
@@ -621,9 +607,97 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         textField2.text = newString
         
         translateButton(self.translateButtonOutlet)
+        
+        hideCollectionView()
+        
+        print(savedTextField2)
+        print("Stepper Value: \(stepper.value)")
+   
     
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return collectionItems.count - 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionViewCell", for: indexPath as IndexPath) as! CollectionViewCell
+//        cell.backgroundColor = UIColor.blue
+        
+        cell.singleLetterButton.setTitle(collectionItems[indexPath.item], for: .normal)
+
+        return cell
+    }
+    
+
+    @IBAction func singleLetterAction(_ sender: Any) {
+        
+        hideCollectionView()
+        
+        if isSingleLetter == true {
+            
+        let aminoDictionary = ["G":"Gly", "A":"Ala", "L":"Leu", "M":"Met", "F":"Phe", "W":"Trp", "K":"Lys", "Q":"Gln", "E":"Glu", "S":"Ser", "P":"Pro", "V":"Val", "I":"Ile", "C":"Cys", "Y":"Tyr", "H":"His", "R":"Arg", "N":"Asn", "D":"Asp", "T":"Thr"]
+        var aminoAcidString = ""
+        var checkAmino = ""
+        var numberOfLetters = 0
+        //        numberOfTaps+=1
+        //
+        //        if numberOfTaps % 2 == 0 {
+        //            print("numberOfTaps:\(numberOfTaps) is even")
+        //            singleLetterAminoAcidOutlet.setTitle("single letter", for: .normal)
+        //
+        //        } else {
+        //            print("numberOfTaps:\(numberOfTaps) is odd")
+        //            singleLetterAminoAcidOutlet.setTitle("three letter", for: .normal)
+        //        }
+        
+        //
+        let aminosWithoutDashes = labelTranslated.text!.replacingOccurrences(of: "-", with: "", options: NSString.CompareOptions.literal, range:nil)
+        
+        for n in aminosWithoutDashes {
+            numberOfLetters += 1
+            checkAmino.append(n)
+            
+            if numberOfLetters % 3 == 0 {
+                
+                for (singleLetter, threeLetter) in aminoDictionary {
+                    if checkAmino == threeLetter  {
+                        aminoAcidString.append(singleLetter)
+                        aminoAcidString.append("-")
+
+                        self.labelTranslated.text! = aminoAcidString
+                        checkAmino.removeAll()
+                    }
+                    
+                }
+            }
+            
+        }
+            
+            let labelWithoutDashes = self.labelTranslated.text!.components(separatedBy: "-")
+            self.collectionItems = labelWithoutDashes
+            print(collectionItems)
+            self.collectionView.reloadData()
+
+             isSingleLetter = false
+
+    }
+        else {
+
+            translateButton(self.translateButtonOutlet)
+            hideCollectionView()
+
+            
+    }
+    
+    }
+    
+    func hideCollectionView() {
+        self.collectionView.isHidden = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            self.collectionView.isHidden = false
+        }
+    }
 }
 
 
