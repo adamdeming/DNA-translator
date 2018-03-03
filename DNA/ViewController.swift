@@ -37,6 +37,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var collectionView: UICollectionView!
     
     
+    var codonTable = [
+        "AUA":"Ile", "AUC":"Ile", "AUU":"Ile", "AUG":"Met",
+        "ACA":"Thr", "ACC":"Thr", "ACG":"Thr", "ACU":"Thr",
+        "AAC":"Asn", "AAU":"Asn", "AAA":"Lys", "AAG":"Lys",
+        "AGC":"Ser", "AGU":"Ser", "AGA":"Arg", "AGG":"Arg",
+        "CUA":"Leu", "CUC":"Leu", "CUG":"Leu", "CUU":"Leu",
+        "CCA":"Pro", "CCC":"Pro", "CCG":"Pro", "CCU":"Pro",
+        "CAC":"His", "CAU":"His", "CAA":"Gln", "CAG":"Gln",
+        "CGA":"Arg", "CGC":"Arg", "CGG":"Arg", "CGU":"Arg",
+        "GUA":"Val", "GUC":"Val", "GUG":"Val", "GUU":"Val",
+        "GCA":"Ala", "GCC":"Ala", "GCG":"Ala", "GCU":"Ala",
+        "GAC":"Asp", "GAU":"Asp", "GAA":"Glu", "GAG":"Glu",
+        "GGA":"Gly", "GGC":"Gly", "GGG":"Gly", "GGU":"Gly",
+        "UCA":"Ser", "UCC":"Ser", "UCG":"Ser", "UCU":"Ser",
+        "UUC":"Phe", "UUU":"Phe", "UUA":"Leu", "UUG":"Leu",
+        "UAC":"Tyr", "UAU":"Tyr", "UAA":"Stop", "UAG":"Stop",
+        "UGC":"Cys", "UGU":"Cys", "UGA":"Stop", "UGG":"Trp",
+        ]
+    
     var menuIsVisible = false
     var originalString = ""
     // Video Background
@@ -48,8 +67,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     var height: CGFloat!
     
     
-    var historyArrayDNA = [String]()
-    var historyArrayRNA = [String]()
+//    var historyArrayDNA = [String]()
+//    var historyArrayRNA = [String]()
     var tableViewArray = [String]()
     let navTitle = UILabel()
     
@@ -99,15 +118,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         translateButtonOutlet.frame = CGRect(x: (width / 2) - (translateButtonOutlet.frame.size.width/2), y: textField2.frame.origin.y + 40, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
         mainView.addSubview(translateButtonOutlet)
         
-        complementButtonOutlet.frame = CGRect(x: (width-40) - complementButtonOutlet.frame.size.width, y: textField.frame.origin.y + 40, width: complementButtonOutlet.frame.size.width, height: complementButtonOutlet.frame.size.height)
-        mainView.addSubview(singleLetterAminoAcidOutlet)
+        complementButtonOutlet.frame = CGRect(x: (width-40) - complementButtonOutlet.frame.size.width, y: textField2.frame.origin.y + 180, width: complementButtonOutlet.frame.size.width, height: complementButtonOutlet.frame.size.height)
+        mainView.addSubview(complementButtonOutlet)
+        complementButtonOutlet.isHidden = true
 
         singleLetterAminoAcidOutlet.isHidden = true
         singleLetterAminoAcidOutlet.frame = CGRect(x: (width-40) - singleLetterAminoAcidOutlet.frame.size.width, y: textField2.frame.origin.y + 40, width: singleLetterAminoAcidOutlet.frame.size.width, height: singleLetterAminoAcidOutlet.frame.size.height)
         mainView.addSubview(singleLetterAminoAcidOutlet)
         
         // Label UI Setup
-        labelTranslated.frame = CGRect(x: stepper.frame.origin.x + 100, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.size.height)
+        labelTranslated.frame = CGRect(x: 40, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.size.height)
         mainView.addSubview(labelTranslated)
         labelTranslated.isHidden = true
         
@@ -168,15 +188,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         if (defaults.value(forKey: "historyAmino") != nil) {
             tableViewArray = (defaults.array(forKey: "historyAmino") as? [String])!
-            historyArrayDNA = (defaults.array(forKey: "historyDNA") as? [String])!
-            historyArrayRNA = (defaults.array(forKey: "historyRNA") as? [String])!
+//            historyArrayDNA = (defaults.array(forKey: "historyDNA") as? [String])!
+//            historyArrayRNA = (defaults.array(forKey: "historyRNA") as? [String])!
         } else {
             tableViewArray = []
-            historyArrayDNA = []
-            historyArrayRNA = []
-            defaults.set(tableViewArray, forKey: "historyAmino") //setObject
-            defaults.set(historyArrayDNA, forKey: "historyDNA")
-            defaults.set(historyArrayRNA, forKey: "historyRNA")
+               defaults.set(tableViewArray, forKey: "historyAmino")
+//            historyArrayDNA = []
+//            historyArrayRNA = []
+//            defaults.set(historyArrayDNA, forKey: "historyDNA")
+//            defaults.set(historyArrayRNA, forKey: "historyRNA")
             defaults.synchronize()
         }
         tableView.reloadData()
@@ -211,6 +231,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     @objc func textFieldListener(textField: UITextField) {
         countLabel1.text = "\(textField.text?.count ?? 0)"
+        stepper.value = 1
+        stepper.isHidden = true
+        complementButtonOutlet.isHidden = true
+        readingFrameValueLabel.isHidden = true
+        collectionView.isHidden = true
+        isAction = true
+
         
         if textField.text == "" {
             labelTranslated.text = ""
@@ -225,6 +252,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         countLabel2.text = "\(textField2.text?.count ?? 0)"
         stepper.value = 1
         stepper.isHidden = true
+        complementButtonOutlet.isHidden = true
         readingFrameValueLabel.isHidden = true
         collectionView.isHidden = true
         isAction = true
@@ -233,6 +261,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             labelTranslated.text = ""
             originalString = ""
             stepper.isHidden = true
+            complementButtonOutlet.isHidden = true
             readingFrameValueLabel.isHidden = true
             countLabel2.text = "0"
         }
@@ -264,6 +293,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                 countLabel2.text = "0"
             }
         }
+        
+        let characterset = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+        if textField2.text!.rangeOfCharacter(from: characterset.inverted) != nil {
+            print("string contains special characters")
+        }
+        
         
         for i in textField.text! {
             switch i {
@@ -298,25 +333,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             isAction = true
         }
         countLabel2.text = "\(textField2.text!.count)"
-        
-        var codonTable = [
-            "AUA":"Ile", "AUC":"Ile", "AUU":"Ile", "AUG":"Met",
-            "ACA":"Thr", "ACC":"Thr", "ACG":"Thr", "ACU":"Thr",
-            "AAC":"Asn", "AAU":"Asn", "AAA":"Lys", "AAG":"Lys",
-            "AGC":"Ser", "AGU":"Ser", "AGA":"Arg", "AGG":"Arg",
-            "CUA":"Leu", "CUC":"Leu", "CUG":"Leu", "CUU":"Leu",
-            "CCA":"Pro", "CCC":"Pro", "CCG":"Pro", "CCU":"Pro",
-            "CAC":"His", "CAU":"His", "CAA":"Gln", "CAG":"Gln",
-            "CGA":"Arg", "CGC":"Arg", "CGG":"Arg", "CGU":"Arg",
-            "GUA":"Val", "GUC":"Val", "GUG":"Val", "GUU":"Val",
-            "GCA":"Ala", "GCC":"Ala", "GCG":"Ala", "GCU":"Ala",
-            "GAC":"Asp", "GAU":"Asp", "GAA":"Glu", "GAG":"Glu",
-            "GGA":"Gly", "GGC":"Gly", "GGG":"Gly", "GGU":"Gly",
-            "UCA":"Ser", "UCC":"Ser", "UCG":"Ser", "UCU":"Ser",
-            "UUC":"Phe", "UUU":"Phe", "UUA":"Leu", "UUG":"Leu",
-            "UAC":"Tyr", "UAU":"Tyr", "UAA":"Stop", "UAG":"Stop",
-            "UGC":"Cys", "UGU":"Cys", "UGA":"Stop", "UGG":"Trp",
-            ]
+    
         var numberOfCharacters = 0
         var rnaSequenceDebug = ""
         var RNA = ""
@@ -334,6 +351,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                 countLabel1.text = "0"
                 countLabel2.text = "0"
             }
+    
         }
         
         
@@ -364,48 +382,38 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
         }
         
-            let main_string = labelTranslated.text!
-            let string_to_color = "Stop"
-
-            let range = (main_string as NSString).range(of: string_to_color)
-            let attributedString = NSMutableAttributedString(string:main_string)
-            attributedString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.red , range: range)
-        
-        
-            labelTranslated.attributedText = attributedString
-
         // Return Keyboard
         textFieldShouldReturn(textField2)
         
-        // Unhide Stepper and Label
+        // Unhide
         stepper.isHidden = false
         readingFrameValueLabel.isHidden = false
+        complementButtonOutlet.isHidden = false
 
         // Update History Table View
         if stepper.value == 1 {
         tableViewArray.insert(labelTranslated.text!, at: 0)
         tableViewArray = tableViewArray.filter { $0 != "" }
-        historyArrayDNA.insert(textField.text!, at: 0)
-        historyArrayRNA.insert(textField2.text!, at: 0)
+//        historyArrayDNA.insert(textField.text!, at: 0)
+//        historyArrayRNA.insert(textField2.text!, at: 0)
             
         tableViewArray.removeDuplicates()
-        historyArrayRNA.removeDuplicates()
-        historyArrayDNA.removeDuplicates()
+//        historyArrayRNA.removeDuplicates()
+//        historyArrayDNA.removeDuplicates()
 
         print(tableViewArray)
-        print(historyArrayRNA)
-        print(historyArrayDNA)
-        
+
         // Save Value
         defaults.set(tableViewArray, forKey: "historyAmino") //setObject
-        defaults.set(historyArrayDNA, forKey: "historyDNA")
-        defaults.set(historyArrayRNA, forKey: "historyRNA")
+//        defaults.set(historyArrayDNA, forKey: "historyDNA")
+//        defaults.set(historyArrayRNA, forKey: "historyRNA")
         defaults.synchronize()
-        
-        if tableViewArray.count == 0 {
-            historyArrayRNA.removeAll()
-            historyArrayDNA.removeAll()
-        }
+            
+//
+//        if tableViewArray.count == 0 {
+//            historyArrayRNA.removeAll()
+//            historyArrayDNA.removeAll()
+//        }
     
         tableView.reloadData()
         }
@@ -422,6 +430,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         isSingleLetter = true
         savedTextField2 = textField2.text!
         
+        hideCollectionView()
+        
+        // bug fix for duplicate array crash
+        transcribeButton(self.transcribeButtonOutlet)
   }
     
     @IBAction func complementButton(_ sender: Any) {
@@ -439,28 +451,28 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             }
         }
         
-        var complementString = ""
-        
-        // complementary mRNA transcription
-                    for i in textField.text! {
-                        switch i {
-                        case "G":
-                            complementString.append("C")
-                            textField.text = complementString
-                        case "A":
-                            complementString.append("T")
-                            textField.text = complementString
-                        case "C":
-                            complementString.append("G")
-                            textField.text = complementString
-                        case "T":
-                            complementString.append("A")
-                            textField.text = complementString
-                        default:
-                            print("Complementary DNA")
-                        }
-                    }
-        
+//        var complementString = ""
+//
+//        // complementary mRNA transcription
+//                    for i in textField.text! {
+//                        switch i {
+//                        case "G":
+//                            complementString.append("C")
+//                            textField.text = complementString
+//                        case "A":
+//                            complementString.append("T")
+//                            textField.text = complementString
+//                        case "C":
+//                            complementString.append("G")
+//                            textField.text = complementString
+//                        case "T":
+//                            complementString.append("A")
+//                            textField.text = complementString
+//                        default:
+//                            print("Complementary DNA")
+//                        }
+//                    }
+//
         
     }
     
@@ -551,21 +563,29 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         print("You tapped cell number \(indexPath.row).")
         
         labelTranslated.text = tableViewArray[indexPath.row]
-        textField.text = historyArrayDNA[indexPath.row]
-        textField2.text = historyArrayRNA[indexPath.row]
+//        textField.text = historyArrayDNA[indexPath.row]
+//        textField2.text = historyArrayRNA[indexPath.row]
         
         countLabel1.text = "\(textField.text!.count)"
         countLabel2.text = "\(textField2.text!.count)"
         textField.reloadInputViews()
         textField2.reloadInputViews()
         
-        stepper.isHidden = false
-        readingFrameValueLabel.isHidden = false
         originalString = textField2.text!
         stepper.value = 1
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
         
+        collectionView.isHidden = true
         collectionView.reloadData()
+        
+        
+//        print(historyArrayRNA)
+//        print(historyArrayDNA)
+        print(tableViewArray)
+        
+        reverseTranslate()
+        translateButton(self.translateButtonOutlet)
+
         
         handleGesture(gesture: UISwipeGestureRecognizer.init())
     }
@@ -583,8 +603,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             print("Deleted")
             
             tableViewArray.remove(at: indexPath.row)
-            historyArrayRNA.remove(at: indexPath.row)
-            historyArrayDNA.remove(at: indexPath.row)
+//            historyArrayRNA.remove(at: indexPath.row)
+//            historyArrayDNA.remove(at: indexPath.row)
             collectionItems.removeAll()
             collectionView.isHidden = true
             textField.text = ""
@@ -596,15 +616,82 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             stepper.value = 1
             readingFrameValueLabel.isHidden = true
             stepper.isHidden = true
+            complementButtonOutlet.isHidden = true
             defaults.set(tableViewArray, forKey: "historyAmino")
-            defaults.set(historyArrayDNA, forKey: "historyDNA")
-            defaults.set(historyArrayRNA, forKey: "historyRNA")
+//            defaults.set(historyArrayDNA, forKey: "historyDNA")
+//            defaults.set(historyArrayRNA, forKey: "historyRNA")
             defaults.synchronize()
-            
+
             tableView.reloadData()
+            
+//            if tableViewArray.isEmpty {
+//                historyArrayRNA.removeAll()
+//                historyArrayDNA.removeAll()
+//            }
+//            print(historyArrayRNA)
+//            print(historyArrayDNA)
+            
+            print(tableViewArray)
+
         }
         
     }
+    
+    func reverseTranslate() {
+        
+        var numberOfCharacters = 0
+        var reverseRNA = ""
+        var checkAminos = ""
+        let filteredString = labelTranslated.text!.filter { $0 != "-" }
+        var filteredArray = [String]()
+        filteredArray.append(filteredString)
+        let joinedArray = filteredArray.joined(separator: "")
+        
+        for element in joinedArray {
+            numberOfCharacters += 1
+            print(numberOfCharacters)
+            
+            checkAminos.append(String(element))
+            print(checkAminos)
+            
+            if numberOfCharacters % 3 == 0 {
+                
+                for (codon,aminoAcid) in codonTable {
+                    if checkAminos == aminoAcid {
+                        reverseRNA.append(codon)
+                        print("REVERSE RNA: \(reverseRNA)")
+                        textField2.text! = reverseRNA
+                        
+                        checkAminos.removeAll()
+                    }}
+            }}
+        
+        
+        // Fills in TextField1
+        var reverseDNA = ""
+        
+        for i in textField2.text! {
+            switch i {
+            case "G":
+                reverseDNA.append("G")
+                textField.text = reverseDNA
+            case "A":
+                reverseDNA.append("A")
+                textField.text = reverseDNA
+            case "C":
+                reverseDNA.append("C")
+                textField.text = reverseDNA
+            case "U":
+                reverseDNA.append("T")
+                textField.text = reverseDNA
+            default:
+                print(i)
+            }
+        }
+        
+        
+    }
+    
     
     @IBAction func stepperRFValueChanged(_ sender: UIStepper) {
         
@@ -688,7 +775,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
             translateButton(self.translateButtonOutlet)
             hideCollectionView()
-
             
     }
     
@@ -701,6 +787,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
     }
 
+    
+
+    
+    
+    
     
 }
 
