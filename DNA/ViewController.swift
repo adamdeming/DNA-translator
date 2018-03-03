@@ -59,6 +59,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     var isSingleLetter = false
     var savedTextField2 = ""
 
+    var sortedArray = [String]()
     
     let defaults = UserDefaults.standard
     
@@ -222,6 +223,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     @objc func textField2Listener(textField2: UITextField) {
         countLabel2.text = "\(textField2.text?.count ?? 0)"
+        stepper.value = 1
+        stepper.isHidden = true
+        readingFrameValueLabel.isHidden = true
+        collectionView.isHidden = true
+        isAction = true
         
         if textField2.text == "" {
             labelTranslated.text = ""
@@ -229,12 +235,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             stepper.isHidden = true
             readingFrameValueLabel.isHidden = true
             countLabel2.text = "0"
-            stepper.isHidden = true
         }
-        if textField2.text!.count > 0 {
-            stepper.isHidden = false
-            readingFrameValueLabel.isHidden = false
-        }
+
         if tableViewArray.isEmpty {
             countLabel2.text = "0"
         }
@@ -293,7 +295,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
         if isAction == true {
             originalString = textField2.text!
-            
             isAction = true
         }
         countLabel2.text = "\(textField2.text!.count)"
@@ -387,6 +388,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         historyArrayDNA.insert(textField.text!, at: 0)
         historyArrayRNA.insert(textField2.text!, at: 0)
             
+        tableViewArray.removeDuplicates()
+        historyArrayRNA.removeDuplicates()
+        historyArrayDNA.removeDuplicates()
+
+        print(tableViewArray)
+        print(historyArrayRNA)
+        print(historyArrayDNA)
+        
         // Save Value
         defaults.set(tableViewArray, forKey: "historyAmino") //setObject
         defaults.set(historyArrayDNA, forKey: "historyDNA")
@@ -533,7 +542,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         // set the text from the data model
         cell.textLabel?.text = tableViewArray[indexPath.row]
-
+        
         return cell
     }
     
@@ -556,6 +565,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         stepper.value = 1
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
         
+        collectionView.reloadData()
+        
         handleGesture(gesture: UISwipeGestureRecognizer.init())
     }
 
@@ -574,6 +585,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             tableViewArray.remove(at: indexPath.row)
             historyArrayRNA.remove(at: indexPath.row)
             historyArrayDNA.remove(at: indexPath.row)
+            collectionItems.removeAll()
+            collectionView.isHidden = true
             textField.text = ""
             textField2.text = ""
             labelTranslated.text = ""
@@ -640,18 +653,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         var aminoAcidString = ""
         var checkAmino = ""
         var numberOfLetters = 0
-        //        numberOfTaps+=1
-        //
-        //        if numberOfTaps % 2 == 0 {
-        //            print("numberOfTaps:\(numberOfTaps) is even")
-        //            singleLetterAminoAcidOutlet.setTitle("single letter", for: .normal)
-        //
-        //        } else {
-        //            print("numberOfTaps:\(numberOfTaps) is odd")
-        //            singleLetterAminoAcidOutlet.setTitle("three letter", for: .normal)
-        //        }
-        
-        //
+
         let aminosWithoutDashes = labelTranslated.text!.replacingOccurrences(of: "-", with: "", options: NSString.CompareOptions.literal, range:nil)
         
         for n in aminosWithoutDashes {
@@ -697,6 +699,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             self.collectionView.isHidden = false
         }
+    }
+
+    
+}
+
+
+extension Array where Element: Equatable {
+    mutating func removeDuplicates() {
+        var result = [Element]()
+        for value in self {
+            if !result.contains(value) {
+                result.append(value)
+            }
+        }
+        self = result
     }
 }
 
