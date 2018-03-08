@@ -23,8 +23,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="704"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kWt-nx-zhy">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="kWt-nx-zhy">
                                 <rect key="frame" x="0.0" y="0.0" width="642" height="704"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="tmL-jd-k3R"/>
@@ -212,19 +213,14 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="rRR-Ya-NnV" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="2gE-jl-hsI"/>
-                            <constraint firstItem="kWt-nx-zhy" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="4Q8-jJ-Fpi"/>
-                            <constraint firstItem="kWt-nx-zhy" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="6II-pW-FuS"/>
                             <constraint firstItem="rRR-Ya-NnV" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="7IF-RW-xIj"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="kWt-nx-zhy" secondAttribute="trailing" constant="382" id="Da8-Fe-rG0"/>
-                            <constraint firstItem="kWt-nx-zhy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="YWa-Jb-PbL"/>
                             <constraint firstItem="rRR-Ya-NnV" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="mpM-e2-IGo"/>
                             <constraint firstItem="rRR-Ya-NnV" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="nx6-8L-M2d"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="L1W-Nc-fhz">
-                        <barButtonItem key="leftBarButtonItem" image="MenuButton" width="290" id="g0s-J0-1mq">
-                            <inset key="imageInsets" minX="0.0" minY="0.0" maxX="500" maxY="0.0"/>
+                        <barButtonItem key="leftBarButtonItem" image="MenuButton" id="g0s-J0-1mq">
                             <color key="tintColor" red="0.40779560804367065" green="0.40787053108215332" blue="0.40779092907905579" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="menuAction:" destination="BYZ-38-t0r" id="VWM-q2-wvG"/>
@@ -244,7 +240,7 @@
                         <outlet property="readingFrameValueLabel" destination="a3b-kq-GVL" id="tef-Ce-O3w"/>
                         <outlet property="singleLetterAminoAcidOutlet" destination="J2g-IC-30G" id="Dvw-2Z-6J8"/>
                         <outlet property="stepper" destination="D5v-Tk-e7O" id="Efh-KS-ARy"/>
-                        <outlet property="tableView" destination="kWt-nx-zhy" id="U5u-Rs-7Iz"/>
+                        <outlet property="tableView" destination="kWt-nx-zhy" id="h3G-ko-BUi"/>
                         <outlet property="textField" destination="k4B-Ha-efo" id="qZ9-tN-TmD"/>
                         <outlet property="textField2" destination="432-4D-LDP" id="Z7w-5J-KGi"/>
                         <outlet property="trailingC" destination="nx6-8L-M2d" id="3r6-rO-Dhg"/>

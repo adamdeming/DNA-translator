@@ -37,6 +37,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var collectionView: UICollectionView!
     
     
+    
     var menuIsVisible = false
     var originalString = ""
     // Video Background
@@ -74,6 +75,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         print("VIEW WIDTH: \(view.frame.width)")
         print("VIEW HEIGHT: \(view.frame.height)")
 
+        tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: height)
+        view.addSubview(tableView)
+        
+        view.addSubview(mainView)
         // TextField UI Setup
         textField.frame = CGRect(x: 40, y: height * 0.1, width: width-80, height: textField.frame.size.height)
         mainView.addSubview(textField)
@@ -85,22 +90,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         textField2.setBottomBorder()
         
         // Count Label UI Setup
-        countLabel1.frame = CGRect(x: 40, y: textField.frame.origin.y + 40, width: countLabel1.frame.size.width, height: countLabel1.frame.size.height)
+        countLabel1.frame = CGRect(x: 40, y: height * 0.2, width: countLabel1.frame.size.width, height: countLabel1.frame.size.height)
         mainView.addSubview(countLabel1)
         countLabel1.text = "0"
-        countLabel2.frame = CGRect(x: 40, y: textField2.frame.origin.y + 40, width: countLabel2.frame.size.width, height: countLabel2.frame.size.height)
+        countLabel2.frame = CGRect(x: 40, y: height * 0.4, width: countLabel2.frame.size.width, height: countLabel2.frame.size.height)
         mainView.addSubview(countLabel2)
         countLabel2.text = "0"
         
-        // Button UI Setup
-        transcribeButtonOutlet.frame = CGRect(x: (width / 2) - (transcribeButtonOutlet.frame.size.width/2), y: textField.frame.origin.y + 40, width: transcribeButtonOutlet.frame.size.width, height: transcribeButtonOutlet.frame.size.height)
-        mainView.addSubview(transcribeButtonOutlet)
-        
-        translateButtonOutlet.frame = CGRect(x: (width / 2) - (translateButtonOutlet.frame.size.width/2), y: textField2.frame.origin.y + 40, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
-        mainView.addSubview(translateButtonOutlet)
-        
         complementButtonOutlet.frame = CGRect(x: (width-40) - complementButtonOutlet.frame.size.width, y: textField.frame.origin.y + 40, width: complementButtonOutlet.frame.size.width, height: complementButtonOutlet.frame.size.height)
         mainView.addSubview(singleLetterAminoAcidOutlet)
+        complementButtonOutlet.isHidden = true
 
         singleLetterAminoAcidOutlet.isHidden = true
         singleLetterAminoAcidOutlet.frame = CGRect(x: (width-40) - singleLetterAminoAcidOutlet.frame.size.width, y: textField2.frame.origin.y + 40, width: singleLetterAminoAcidOutlet.frame.size.width, height: singleLetterAminoAcidOutlet.frame.size.height)
@@ -111,19 +110,27 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         mainView.addSubview(labelTranslated)
         labelTranslated.isHidden = true
         
-        // Label UI Setup
-        collectionView.frame = CGRect(x: 40, y: textField2.frame.origin.y + 80 , width: width-80, height: collectionView.frame.size.height)
+        collectionView.frame = CGRect(x: 40, y: height * 0.5, width: width-80, height: collectionView.frame.size.height)
         mainView.addSubview(collectionView)
         collectionView.isHidden = true
         
-        stepper.frame = CGRect(x: 40, y: textField2.frame.origin.y + 180 , width: stepper.frame.size.width, height: stepper.frame.size.height)
+        // Button UI Setup
+        transcribeButtonOutlet.frame = CGRect(x: (width / 2) - (transcribeButtonOutlet.frame.size.width/2), y: height * 0.2, width: transcribeButtonOutlet.frame.size.width, height: transcribeButtonOutlet.frame.size.height)
+        mainView.addSubview(transcribeButtonOutlet)
+        
+        translateButtonOutlet.frame = CGRect(x: (width / 2) - (translateButtonOutlet.frame.size.width/2), y: height * 0.4, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
+        mainView.addSubview(translateButtonOutlet)
+        
+        
+        stepper.frame = CGRect(x: 40, y: height * 0.73, width: stepper.frame.size.width, height: stepper.frame.size.height)
         mainView.addSubview(stepper)
         stepper.isHidden = true
-
-        readingFrameValueLabel.frame = CGRect(x: 35, y: stepper.frame.origin.y + 30, width: readingFrameValueLabel.frame.size.width, height: readingFrameValueLabel.frame.size.height)
+        
+        readingFrameValueLabel.frame = CGRect(x: 35, y: height * 0.8, width: readingFrameValueLabel.frame.size.width, height: readingFrameValueLabel.frame.size.height)
         mainView.addSubview(readingFrameValueLabel)
         readingFrameValueLabel.isHidden = true
         
+
         // Tap View to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
         mainView.addGestureRecognizer(tap)
@@ -194,6 +201,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         textField.addTarget(self, action: #selector(textFieldListener(textField:)), for: UIControlEvents.allEditingEvents)
         textField2.addTarget(self, action: #selector(textField2Listener(textField2:)), for: UIControlEvents.allEditingEvents)
         
+        print("Transcribe XY: \(transcribeButtonOutlet.frame.origin.x),\(transcribeButtonOutlet.frame.origin.y)")
+        print("Translate XY: \(translateButtonOutlet.frame.origin.x),\(translateButtonOutlet.frame.origin.y)")
+        print("Count Label 1 XY: \(countLabel1.frame.origin.x),\(countLabel1.frame.origin.y)")
+        print("Count Label 2 XY: \(countLabel2.frame.origin.x),\(countLabel2.frame.origin.y)")
+        print("Collection View XY: \(collectionView.frame.origin.x),\(collectionView.frame.origin.y)")
+        print("Stepper XY: \(stepper.frame.origin.x),\(stepper.frame.origin.y)")
+        print("Reading Frame Label XY: \(readingFrameValueLabel.frame.origin.x),\(readingFrameValueLabel.frame.origin.y)")
+
 
     }
     
@@ -393,8 +408,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         historyArrayDNA.removeDuplicates()
 
         print(tableViewArray)
-        print(historyArrayRNA)
         print(historyArrayDNA)
+        print(historyArrayRNA)
+
         
         // Save Value
         defaults.set(tableViewArray, forKey: "historyAmino") //setObject
@@ -482,15 +498,17 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBAction func menuAction(_ sender: Any) {
         
         if !menuIsVisible {
-            leadingC.constant = 350
-            trailingC.constant = -350
+            leadingC.constant = width * 0.48
+            trailingC.constant = width * -0.48
             countLabel1.isHidden = true
             countLabel2.isHidden = true
             navTitle.isHidden = false
             menuIsVisible = true
             print(tableViewArray.count)
-
-            navigationItem.leftBarButtonItems = [menuButton, editButtonItem]
+            
+            let fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
+            fixedSpace.width = width * 0.33
+            navigationItem.leftBarButtonItems = [menuButton, fixedSpace, editButtonItem]
            
         } else {
             leadingC.constant = 0
@@ -499,7 +517,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             countLabel2.isHidden = false
             navTitle.isHidden = true
             menuIsVisible = false
-
+            
+            
             navigationItem.leftBarButtonItems = [menuButton]
         }
         
@@ -565,7 +584,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         stepper.value = 1
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
         
-        collectionView.reloadData()
+        translateButton(self.translateButtonOutlet)
         
         handleGesture(gesture: UISwipeGestureRecognizer.init())
     }
@@ -585,6 +604,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             tableViewArray.remove(at: indexPath.row)
             historyArrayRNA.remove(at: indexPath.row)
             historyArrayDNA.remove(at: indexPath.row)
+            
+            if tableViewArray.isEmpty {
+                historyArrayDNA.removeAll()
+                historyArrayRNA.removeAll()
+            }
+            
+            print(tableViewArray)
+            print(historyArrayDNA)
+            print(historyArrayRNA)
+
             collectionItems.removeAll()
             collectionView.isHidden = true
             textField.text = ""
