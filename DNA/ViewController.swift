@@ -567,7 +567,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     // method to run when table view cell is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    
         print("You tapped cell number \(indexPath.row).")
         
         labelTranslated.text = tableViewArray[indexPath.row]
@@ -740,7 +739,7 @@ extension Array where Element: Equatable {
         var result = [Element]()
         for value in self {
             if !result.contains(value) {
-                result.insert(value, at: 0)
+                result.append(value)
             }
         }
         self = result
