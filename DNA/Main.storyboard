@@ -9,11 +9,6 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
-    <customFonts key="customFonts">
-        <array key="ArialBold.ttf">
-            <string>Arial-BoldMT</string>
-        </array>
-    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -104,42 +99,6 @@
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J2g-IC-30G">
-                                        <rect key="frame" x="714" y="271" width="111" height="33"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.99833542109999995" green="0.33102160689999999" blue="0.49606531860000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" name="Arial-BoldMT" family="Arial" pointSize="17"/>
-                                        <state key="normal" title="single letter">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="5"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="singleLetterAminoAcidButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="vkZ-FI-6QD"/>
-                                            <action selector="translateButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YYa-nF-gXY"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KA2-LV-J6V">
-                                        <rect key="frame" x="717" y="149" width="108" height="33"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="backgroundColor" red="0.26534616950000001" green="0.54108428959999999" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                        <state key="normal" title="complement">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="5"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
-                                        <connections>
-                                            <action selector="complementButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9y9-me-ljC"/>
-                                            <action selector="transcribeButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="PqW-BG-1fE"/>
-                                        </connections>
-                                    </button>
                                     <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="3" translatesAutoresizingMaskIntoConstraints="NO" id="D5v-Tk-e7O">
                                         <rect key="frame" x="199" y="467" width="94" height="29"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -226,19 +185,32 @@
                                 <action selector="menuAction:" destination="BYZ-38-t0r" id="VWM-q2-wvG"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="ePi-bS-7Gc">
+                            <view key="customView" contentMode="scaleToFill" id="Aos-9N-ooz">
+                                <rect key="frame" x="910" y="0.0" width="94" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="DNAStrandSolo" translatesAutoresizingMaskIntoConstraints="NO" id="B81-RC-O2E">
+                                        <rect key="frame" x="29" y="0.0" width="17" height="36"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="collectionView" destination="lrm-LE-4Qt" id="ZNX-au-pAG"/>
-                        <outlet property="complementButtonOutlet" destination="KA2-LV-J6V" id="BcN-QX-O8T"/>
                         <outlet property="countLabel1" destination="ma8-Nm-mlm" id="xdr-dj-eSp"/>
                         <outlet property="countLabel2" destination="nxY-ms-Xes" id="1DQ-W6-qd3"/>
+                        <outlet property="iconBarButtonItem" destination="ePi-bS-7Gc" id="zTt-lg-u9Z"/>
+                        <outlet property="iconView" destination="B81-RC-O2E" id="CEw-1G-vAP"/>
                         <outlet property="labelTranslated" destination="zoO-22-sJE" id="DWw-Iw-pwZ"/>
                         <outlet property="leadingC" destination="2gE-jl-hsI" id="4y2-Cn-kTo"/>
                         <outlet property="mainView" destination="rRR-Ya-NnV" id="vbh-Zh-zWk"/>
                         <outlet property="menuButton" destination="g0s-J0-1mq" id="VCe-1V-hJ7"/>
                         <outlet property="navBar" destination="L1W-Nc-fhz" id="h6r-mu-hbc"/>
                         <outlet property="readingFrameValueLabel" destination="a3b-kq-GVL" id="tef-Ce-O3w"/>
-                        <outlet property="singleLetterAminoAcidOutlet" destination="J2g-IC-30G" id="Dvw-2Z-6J8"/>
                         <outlet property="stepper" destination="D5v-Tk-e7O" id="Efh-KS-ARy"/>
                         <outlet property="tableView" destination="kWt-nx-zhy" id="h3G-ko-BUi"/>
                         <outlet property="textField" destination="k4B-Ha-efo" id="qZ9-tN-TmD"/>
@@ -272,6 +244,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="DNAStrandSolo" width="560" height="1518"/>
         <image name="MenuButton" width="16" height="16"/>
     </resources>
 </document>
