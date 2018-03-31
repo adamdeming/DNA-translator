@@ -64,7 +64,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     var sortedArray = [String]()
     
     let defaults = UserDefaults.standard
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -159,6 +159,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         print("Stepper XY: \(stepper.frame.origin.x),\(stepper.frame.origin.y)")
         print("Reading Frame Label XY: \(readingFrameValueLabel.frame.origin.x),\(readingFrameValueLabel.frame.origin.y)")
         
+        textFieldListener(textField: textField)
         
     }
     
@@ -297,7 +298,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             countLabel1.text = "0"
         }
         
-        stepper.value = 1
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
         originalString = ""
         
@@ -305,6 +305,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     @objc func textField2Listener(textField2: UITextField) {
+        reverseTranslate()
+        
         countLabel2.text = "\(textField2.text?.count ?? 0)"
         stepper.value = 1
         stepper.isHidden = true
@@ -328,12 +330,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
         originalString = textField2.text!
         
-        reverseTranslate()
-        
-        
     }
     
     @IBAction func transcribeButton(_ sender: Any) {
+        
+        // Count Label
+        countLabel1.text = "\(textField.text!.count)"
+        countLabel2.text = "\(textField.text!.count)"
         
         var maturemRNA = ""
         
@@ -369,9 +372,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             }
         }
         
-        // Count Label
-        countLabel1.text = "\(textField.text!.count)"
-        countLabel2.text = "\(textField.text!.count)"
         
         textFieldShouldReturn(textField)
         
@@ -507,7 +507,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
         
         
-        
         let labelWithoutDashes = labelTranslated.text!.components(separatedBy: "-")
         collectionItems = labelWithoutDashes
         print(collectionItems)
@@ -519,7 +518,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         hideCollectionView()
     
-
     }
 
     
@@ -697,8 +695,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             print("Deleted")
 //
             tableViewArray.remove(at: indexPath.row)
-            historyArrayRNA.remove(at: indexPath.row)
             historyArrayDNA.remove(at: indexPath.row)
+            historyArrayRNA.remove(at: indexPath.row)
 //
 //            tableViewArray.removeAll()
 //            historyArrayRNA.removeAll()
@@ -746,13 +744,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         let newString = String(originalString.suffix(from: strIndex))
         
         textField2.text = newString
-        
+    
         translateButton(self.translateButtonOutlet)
-        
         hideCollectionView()
     
         print("Stepper Value: \(stepper.value)")
-
+//        reverseTranslate()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
