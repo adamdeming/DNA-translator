@@ -167,7 +167,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     func iphone8AndUnderUI() {
-        tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: tableView.frame.size.height)
+        tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: height - 50)
         view.addSubview(tableView)
         
         view.addSubview(mainView)
@@ -218,7 +218,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
     }
     func iphone10UI() {
-        tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: tableView.frame.size.height)
+        tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: height - 50)
         view.addSubview(tableView)
         
         view.addSubview(mainView)
