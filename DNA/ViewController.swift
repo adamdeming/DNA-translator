@@ -52,6 +52,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     var tableViewArray = [String]()
     var historyArrayDNA = [String]()
     var historyArrayRNA = [String]()
+    
+    var transcribedTapped = false
 
 //    let navTitle = UILabel()
     
@@ -165,7 +167,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     func iphone8AndUnderUI() {
-        tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: height)
+        tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: tableView.frame.size.height)
         view.addSubview(tableView)
         
         view.addSubview(mainView)
@@ -216,7 +218,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
     }
     func iphone10UI() {
-        tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: height)
+        tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: tableView.frame.size.height)
         view.addSubview(tableView)
         
         view.addSubview(mainView)
@@ -281,9 +283,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     @objc func textFieldListener(textField: UITextField) {
-            reverseTranscribe()
+        countLabel1.text = "\(textField.text!.count)"
+        reverseTranscribe()
         
-        countLabel1.text = "\(textField.text?.count ?? 0)"
         stepper.value = 1
         stepper.isHidden = true
         readingFrameValueLabel.isHidden = true
@@ -292,16 +294,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         if textField.text == "" {
             labelTranslated.text = ""
-            countLabel1.text = "0"
             textField2.text = ""
-        }
-        if tableViewArray.isEmpty {
-            countLabel1.text = "0"
         }
         
         stepper.value = 1
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
-        originalString = ""
+        originalString = textField2.text!
+        
         
     }
     
@@ -323,9 +322,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             countLabel2.text = "0"
         }
         
-        if tableViewArray.isEmpty {
-            countLabel2.text = "0"
-        }
         
         stepper.value = 1
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
@@ -386,7 +382,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
     @IBAction func translateButton(_ sender: Any) {
     
-    
+
+        
         if isAction == true {
             originalString = textField2.text!
             isAction = true
@@ -562,6 +559,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     func reverseTranscribe() {
         // complementary mRNA transcription
+    
         var reverseString = ""
         for i in textField.text! {
             switch i {
@@ -786,7 +784,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     @IBAction func stepperRFValueChanged(_ sender: UIStepper) {
-        
         
         isAction = false
         let index = Int(sender.value)
