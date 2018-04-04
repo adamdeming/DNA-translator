@@ -36,7 +36,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var collectionView: UICollectionView!
 
     @IBOutlet weak var iconView: UIImageView!
-    @IBOutlet weak var iconBarButtonItem: UIBarButtonItem!
+    @IBOutlet var iconBarButtonItem: UIBarButtonItem!
+    
     
     
     var menuIsVisible = false
@@ -121,10 +122,12 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         // Bar Buttons
 //        let iconItem = UIBarButtonItem(customView: iconView)
+        let fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
+        fixedSpace.width = width * 0.49
         
         editButtonItem.tintColor = UIColor.darkGray
         self.navigationItem.leftBarButtonItems = [menuButton]
-        self.navigationItem.rightBarButtonItems = [iconBarButtonItem]
+        self.navigationItem.rightBarButtonItems = [fixedSpace, iconBarButtonItem]
         
         if (defaults.value(forKey: "historyAmino") != nil) {
             tableViewArray = (defaults.array(forKey: "historyAmino") as? [String])!
@@ -642,8 +645,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //            navTitle.isHidden = false
             menuIsVisible = true
             print(tableViewArray.count)
-            
 
+            self.navigationItem.rightBarButtonItems = []
             navigationItem.leftBarButtonItems = [menuButton, fixedSpace, editButtonItem]
             
         } else {
@@ -654,9 +657,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //            navTitle.isHidden = true
             menuIsVisible = false
             
+            fixedSpace.width = width * 0.49
             
+            navigationItem.rightBarButtonItems = [fixedSpace, iconBarButtonItem]
             navigationItem.leftBarButtonItems = [menuButton]
-            
         }
         
         UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseIn, animations: { self.view.layoutIfNeeded()

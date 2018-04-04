@@ -44,7 +44,7 @@
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zwj-dq-HIF">
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zwj-dq-HIF">
                                         <rect key="frame" x="458" y="149" width="108" height="33"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.1225645021" green="0.76258993149999998" blue="0.42289316649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -191,7 +191,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="DNAStrandSolo" translatesAutoresizingMaskIntoConstraints="NO" id="B81-RC-O2E">
-                                        <rect key="frame" x="80" y="0.0" width="17" height="36"/>
+                                        <rect key="frame" x="80" y="5" width="17" height="36"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                 </subviews>
@@ -203,7 +203,7 @@
                         <outlet property="collectionView" destination="lrm-LE-4Qt" id="ZNX-au-pAG"/>
                         <outlet property="countLabel1" destination="ma8-Nm-mlm" id="xdr-dj-eSp"/>
                         <outlet property="countLabel2" destination="nxY-ms-Xes" id="1DQ-W6-qd3"/>
-                        <outlet property="iconBarButtonItem" destination="ePi-bS-7Gc" id="zTt-lg-u9Z"/>
+                        <outlet property="iconBarButtonItem" destination="ePi-bS-7Gc" id="g9Q-I4-UvT"/>
                         <outlet property="iconView" destination="B81-RC-O2E" id="CEw-1G-vAP"/>
                         <outlet property="labelTranslated" destination="zoO-22-sJE" id="DWw-Iw-pwZ"/>
                         <outlet property="leadingC" destination="2gE-jl-hsI" id="4y2-Cn-kTo"/>
