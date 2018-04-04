@@ -59,8 +59,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     var collectionItemsSingleLetter = [String]()
     
     var isSingleLetter = false
-
     
+    var isAction = true
+
     var sortedArray = [String]()
     
     let defaults = UserDefaults.standard
@@ -282,6 +283,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     @objc func textFieldListener(textField: UITextField) {
+            reverseTranscribe()
+        
         countLabel1.text = "\(textField.text?.count ?? 0)"
         stepper.value = 1
         stepper.isHidden = true
@@ -298,9 +301,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             countLabel1.text = "0"
         }
         
+        
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
         originalString = ""
-        
         
     }
     
@@ -329,6 +332,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         stepper.value = 1
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
         originalString = textField2.text!
+        
         
     }
     
@@ -377,8 +381,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
     }
     
-    var isAction = true
+
     @IBAction func translateButton(_ sender: Any) {
+    
     
         if isAction == true {
             originalString = textField2.text!
@@ -386,6 +391,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             labelTranslated.text = ""
         }
         
+
         var codonTable = [
             "AUA":"Ile", "AUC":"Ile", "AUU":"Ile", "AUG":"Met",
             "ACA":"Thr", "ACC":"Thr", "ACG":"Thr", "ACU":"Thr",
@@ -413,7 +419,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","T","W","X","Y","Z"]
         
         for letter in nonNucleotideLetters {
-            if textField2.text!.contains(letter) || textField2.text!.containsNumbers() {
+            if textField.text!.contains(letter) || textField2.text!.containsNumbers() {
                 textField2.text = "Nucleotide sequence not recognized"
                 RNA = ""
                 textField.text = ""
@@ -549,6 +555,38 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
         
         countLabel1.text = "\(textField.text!.count)"
+        
+    }
+    
+    func reverseTranscribe() {
+        // complementary mRNA transcription
+        var reverseString = ""
+        for i in textField.text! {
+            switch i {
+            case "G":
+                reverseString.append("G")
+                textField2.text = reverseString
+            case "A":
+                reverseString.append("A")
+                textField2.text = reverseString
+            case "C":
+                reverseString.append("C")
+                textField2.text = reverseString
+            case "T":
+                reverseString.append("U")
+                textField2.text = reverseString
+            default:
+                print("Reverse Transcribed")
+            }
+        }
+        
+        if textField.text!.isEmpty {
+            reverseString.removeAll()
+            textField2.text = reverseString
+        }
+        
+        countLabel2.text = "\(textField.text!.count)"
+        
     }
     
     
@@ -744,12 +782,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         let newString = String(originalString.suffix(from: strIndex))
         
         textField2.text = newString
-    
+            
         translateButton(self.translateButtonOutlet)
         hideCollectionView()
     
         print("Stepper Value: \(stepper.value)")
 //        reverseTranslate()
+    
+    
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
