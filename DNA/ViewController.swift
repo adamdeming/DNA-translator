@@ -193,7 +193,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //
         // Label UI Setup
         labelTranslated.frame = CGRect(x: 80, y: 20, width: width-80, height: labelTranslated.frame.size.height)
-        mainView.addSubview(labelTranslated)
         labelTranslated.isHidden = true
         
         collectionView.frame = CGRect(x: 40, y: height * 0.5, width: width-80, height: collectionView.frame.size.height)
@@ -246,7 +245,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         // Label UI Setup
         labelTranslated.frame = CGRect(x: stepper.frame.origin.x + 100, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.size.height)
-        mainView.addSubview(labelTranslated)
         labelTranslated.isHidden = true
         
         collectionView.frame = CGRect(x: 40, y: height * 0.5, width: width-80, height: collectionView.frame.size.height)
@@ -301,7 +299,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             countLabel1.text = "0"
         }
         
-        
+        stepper.value = 1
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
         originalString = ""
         
@@ -337,6 +335,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     @IBAction func transcribeButton(_ sender: Any) {
+        
+        stepper.value = 1
+        readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
         
         // Count Label
         countLabel1.text = "\(textField.text!.count)"
@@ -379,6 +380,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         textFieldShouldReturn(textField)
         
+        
     }
     
 
@@ -419,7 +421,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","T","W","X","Y","Z"]
         
         for letter in nonNucleotideLetters {
-            if textField.text!.contains(letter) || textField2.text!.containsNumbers() {
+            if textField2.text!.contains(letter) || textField2.text!.containsNumbers() {
                 textField2.text = "Nucleotide sequence not recognized"
                 RNA = ""
                 textField.text = ""
@@ -587,6 +589,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         countLabel2.text = "\(textField.text!.count)"
         
+        // Letters that aren't G,C,A,T
+        let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","U","V","W","X","Y","Z"]
+        
+        for letter in nonNucleotideLetters {
+            if textField.text!.contains(letter) || textField.text!.containsNumbers() {
+                textField.text = "Nucleotide sequence not recognized"
+                textField2.text = ""
+                labelTranslated.text = ""
+                countLabel1.text = "0"
+                countLabel2.text = "0"
+            }
+        }
+        
     }
     
     
@@ -739,7 +754,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //            tableViewArray.removeAll()
 //            historyArrayRNA.removeAll()
 //            historyArrayDNA.removeAll()
-            
+//
             if tableViewArray.isEmpty {
                 historyArrayDNA.removeAll()
                 historyArrayRNA.removeAll()
