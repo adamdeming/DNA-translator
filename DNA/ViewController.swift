@@ -823,10 +823,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         //        cell.backgroundColor = UIColor.blue
         
         cell.singleLetterButton.setTitle(collectionItems[indexPath.item], for: .normal)
+        print(collectionItems[indexPath.item])
         
+        var pink = UIColor(hexString: "#E91E63")
+
+        if collectionItems[indexPath.item] == "Stop" {
+            cell.backgroundColor = .black
+        } else {
+            cell.backgroundColor = pink
+        }
         return cell
     }
-    
+
     
     @IBAction func singleLetterAction(_ sender: Any) {
         
@@ -898,6 +906,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
         
     }
+    
 
 }
 
@@ -955,6 +964,25 @@ extension UITextField {
         self.layer.shadowOpacity = 1.0
         self.layer.shadowRadius = 0.0
     }
+}
 
+extension UIColor {
+    convenience init(hexString: String) {
+        let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int = UInt32()
+        Scanner(string: hex).scanHexInt32(&int)
+        let a, r, g, b: UInt32
+        switch hex.count {
+        case 3: // RGB (12-bit)
+            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: // RGB (24-bit)
+            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        case 8: // ARGB (32-bit)
+            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (a, r, g, b) = (255, 0, 0, 0)
+        }
+        self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
+    }
 }
 
