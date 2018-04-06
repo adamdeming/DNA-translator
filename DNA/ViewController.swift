@@ -122,12 +122,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         // Bar Buttons
 //        let iconItem = UIBarButtonItem(customView: iconView)
-        let fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
-        fixedSpace.width = width * 0.49
         
         editButtonItem.tintColor = UIColor.darkGray
         self.navigationItem.leftBarButtonItems = [menuButton]
-        self.navigationItem.rightBarButtonItems = [fixedSpace, iconBarButtonItem]
+
         
         if (defaults.value(forKey: "historyAmino") != nil) {
             tableViewArray = (defaults.array(forKey: "historyAmino") as? [String])!
@@ -219,6 +217,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         mainView.addSubview(readingFrameValueLabel)
         readingFrameValueLabel.isHidden = true
         
+        let fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
+        fixedSpace.width = width * 0.5
+        self.navigationItem.rightBarButtonItems = [fixedSpace, iconBarButtonItem]
+        
     }
     func iphone10UI() {
         tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: height - 50)
@@ -271,6 +273,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         readingFrameValueLabel.frame = CGRect(x: 35, y: height * 0.8, width: readingFrameValueLabel.frame.size.width, height: readingFrameValueLabel.frame.size.height)
         mainView.addSubview(readingFrameValueLabel)
         readingFrameValueLabel.isHidden = true
+        
+        let fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
+        fixedSpace.width = width * 0.5
+        self.navigationItem.rightBarButtonItems = [fixedSpace, iconBarButtonItem]
         
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -657,7 +663,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //            navTitle.isHidden = true
             menuIsVisible = false
             
-            fixedSpace.width = width * 0.49
+            fixedSpace.width = width * 0.5
             
             navigationItem.rightBarButtonItems = [fixedSpace, iconBarButtonItem]
             navigationItem.leftBarButtonItems = [menuButton]
