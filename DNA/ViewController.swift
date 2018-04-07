@@ -283,9 +283,74 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         
     }
+    
+    func ipadUI() {
+        tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: height - 50)
+        view.addSubview(tableView)
+        
+        view.addSubview(mainView)
+        // TextField UI Setup
+        textField.frame = CGRect(x: 40, y: height * 0.1, width: width-150, height: textField.frame.size.height)
+        mainView.addSubview(textField)
+        
+        textField2.frame = CGRect(x: 40, y: height * 0.3, width: width-150, height: textField2.frame.size.height)
+        mainView.addSubview(textField2)
+        
+        
+        textField.setBottomBorder()
+        textField2.setBottomBorder()
+        
+        // Count Label UI Setup
+        countLabel1.frame = CGRect(x: 40, y: height * 0.2, width: countLabel1.frame.size.width, height: countLabel1.frame.size.height)
+        mainView.addSubview(countLabel1)
+        countLabel1.text = "0"
+        countLabel2.frame = CGRect(x: 40, y: height * 0.4, width: countLabel2.frame.size.width, height: countLabel2.frame.size.height)
+        mainView.addSubview(countLabel2)
+        countLabel2.text = "0"
+        
+        //        complementButtonOutlet.frame = CGRect(x: (width-40) - complementButtonOutlet.frame.size.width, y: textField.frame.origin.y + 40, width: complementButtonOutlet.frame.size.width, height: complementButtonOutlet.frame.size.height)
+        //        mainView.addSubview(complementButtonOutlet)
+        //        complementButtonOutlet.isHidden = true
+        
+        // Label UI Setup
+        labelTranslated.frame = CGRect(x: stepper.frame.origin.x + 100, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.size.height)
+        labelTranslated.isHidden = true
+        
+        collectionView.frame = CGRect(x: 40, y: height * 0.5, width: width-80, height: collectionView.frame.size.height)
+        mainView.addSubview(collectionView)
+        collectionView.isHidden = true
+        
+        // Button UI Setup
+        transcribeButtonOutlet.frame = CGRect(x: (width / 2.2) - (transcribeButtonOutlet.frame.size.width/2.2), y: height * 0.2, width: transcribeButtonOutlet.frame.size.width, height: transcribeButtonOutlet.frame.size.height)
+        mainView.addSubview(transcribeButtonOutlet)
+        
+        translateButtonOutlet.frame = CGRect(x: (width / 2.2) - (translateButtonOutlet.frame.size.width/2.2), y: height * 0.4, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
+        mainView.addSubview(translateButtonOutlet)
+        
+        
+        stepper.frame = CGRect(x: 40, y: height * 0.73, width: stepper.frame.size.width, height: stepper.frame.size.height)
+        mainView.addSubview(stepper)
+        stepper.isHidden = true
+        
+        readingFrameValueLabel.frame = CGRect(x: 35, y: height * 0.8, width: readingFrameValueLabel.frame.size.width, height: readingFrameValueLabel.frame.size.height)
+        mainView.addSubview(readingFrameValueLabel)
+        readingFrameValueLabel.isHidden = true
+        
+        
+        let iconView = UIImageView(frame: CGRect(x: 0, y: 15, width: 16, height: 30))
+        iconView.contentMode = .scaleAspectFit
+        
+        let image = UIImage(named: "DNAStrandSolo")
+        iconView.image = image
+        
+        navigationItem.titleView = iconView
+        
+        
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
+
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return UIStatusBarStyle.lightContent
@@ -469,15 +534,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                 }
             }}
         
-        let main_string = labelTranslated.text!
-        let string_to_color = "Stop"
-        
-        let range = (main_string as NSString).range(of: string_to_color)
-        let attributedString = NSMutableAttributedString(string:main_string)
-        attributedString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.red , range: range)
-        
-        
-        labelTranslated.attributedText = attributedString
+//        let main_string = labelTranslated.text!
+//        let string_to_color = "Stop"
+//
+//        let range = (main_string as NSString).range(of: string_to_color)
+//        let attributedString = NSMutableAttributedString(string:main_string)
+//        attributedString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.red , range: range)
+//
+//
+//        labelTranslated.attributedText = attributedString
         
         // Return Keyboard
         textFieldShouldReturn(textField2)
