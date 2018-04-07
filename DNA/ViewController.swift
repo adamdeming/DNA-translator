@@ -34,11 +34,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var readingFrameValueLabel: UILabel!
     
     @IBOutlet weak var collectionView: UICollectionView!
-
-    @IBOutlet weak var iconView: UIImageView!
-    @IBOutlet var iconBarButtonItem: UIBarButtonItem!
-    
-    
     
     var menuIsVisible = false
     var originalString = ""
@@ -217,10 +212,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         mainView.addSubview(readingFrameValueLabel)
         readingFrameValueLabel.isHidden = true
         
-        let fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
-        fixedSpace.width = width * 0.5
-        self.navigationItem.rightBarButtonItems = [fixedSpace, iconBarButtonItem]
+        let iconView = UIImageView(frame: CGRect(x: 0, y: 15, width: 16, height: 30))
+        iconView.contentMode = .scaleAspectFit
         
+        let image = UIImage(named: "DNAStrandSolo")
+        iconView.image = image
+        
+        navigationItem.titleView = iconView
     }
     func iphone10UI() {
         tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: height - 50)
@@ -273,10 +271,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         readingFrameValueLabel.frame = CGRect(x: 35, y: height * 0.8, width: readingFrameValueLabel.frame.size.width, height: readingFrameValueLabel.frame.size.height)
         mainView.addSubview(readingFrameValueLabel)
         readingFrameValueLabel.isHidden = true
+
         
-        let fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
-        fixedSpace.width = width * 0.5
-        self.navigationItem.rightBarButtonItems = [fixedSpace, iconBarButtonItem]
+        let iconView = UIImageView(frame: CGRect(x: 0, y: 15, width: 16, height: 30))
+        iconView.contentMode = .scaleAspectFit
+        
+        let image = UIImage(named: "DNAStrandSolo")
+        iconView.image = image
+        
+        navigationItem.titleView = iconView
+        
         
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -631,7 +635,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         dismissKeyboard()
         
-        let fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
+        
+        let iconView = UIImageView(frame: CGRect(x: 0, y: 15, width: 16, height: 30))
+        iconView.contentMode = .scaleAspectFit
+        
+        let image = UIImage(named: "DNAStrandSolo")
+        iconView.image = image
+        
         
         if !menuIsVisible {
             
@@ -639,11 +649,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             if width < 800 {
                 leadingC.constant = width * 0.5
                 trailingC.constant = width * -0.5
-                fixedSpace.width = width * 0.39
             } else {
                 leadingC.constant = width * 0.45
                 trailingC.constant = width * -0.45
-                fixedSpace.width = width * 0.34
             }
             
             countLabel1.isHidden = true
@@ -652,8 +660,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             menuIsVisible = true
             print(tableViewArray.count)
 
-            self.navigationItem.rightBarButtonItems = []
-            navigationItem.leftBarButtonItems = [menuButton, fixedSpace, editButtonItem]
+            iconView.isHidden = true
+            navigationItem.titleView = iconView
+            navigationItem.leftBarButtonItems = [menuButton, editButtonItem]
             
         } else {
             leadingC.constant = 0
@@ -663,9 +672,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //            navTitle.isHidden = true
             menuIsVisible = false
             
-            fixedSpace.width = width * 0.5
-            
-            navigationItem.rightBarButtonItems = [fixedSpace, iconBarButtonItem]
+            navigationItem.titleView = iconView
             navigationItem.leftBarButtonItems = [menuButton]
         }
         
