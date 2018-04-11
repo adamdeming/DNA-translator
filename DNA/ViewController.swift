@@ -331,7 +331,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @objc func textField2Listener(textField2: UITextField) {
         reverseTranslate()
         
-        countLabel2.text = "\(textField2.text?.count ?? 0)"
+        countLabel2.text = "\(textField2.text!.count)"
         stepper.value = 1
         stepper.isHidden = true
         readingFrameValueLabel.isHidden = true
@@ -567,9 +567,22 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             case "U":
                 reverseString.append("T")
                 textField.text = reverseString
+            case "g":
+                reverseString.append("g")
+                textField.text = reverseString
+            case "a":
+                reverseString.append("a")
+                textField.text = reverseString
+            case "u":
+                reverseString.append("t")
+                textField.text = reverseString
+            case "c":
+                reverseString.append("c")
+                textField.text = reverseString
             default:
                 print("Reverse Translated")
             }
+            
         }
         
         if textField2.text!.isEmpty {
@@ -578,6 +591,19 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
         
         countLabel1.text = "\(textField.text!.count)"
+        
+        // Letters that aren't G,C,A,T
+        let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","T","V","W","X","Y","Z"]
+        
+        for letter in nonNucleotideLetters {
+            if textField2.text!.contains(letter) || textField2.text!.containsNumbers() {
+                textField2.text = "Nucleotide sequence not recognized"
+                textField.text = ""
+                labelTranslated.text = ""
+                countLabel1.text = "0"
+                countLabel2.text = "0"
+            }
+        }
         
     }
     
@@ -599,6 +625,18 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             case "T":
                 reverseString.append("U")
                 textField2.text = reverseString
+            case "g":
+                reverseString.append("g")
+                textField2.text = reverseString
+            case "a":
+                reverseString.append("a")
+                textField2.text = reverseString
+            case "t":
+                reverseString.append("u")
+                textField2.text = reverseString
+            case "c":
+                reverseString.append("c")
+                textField2.text = reverseString
             default:
                 print("Reverse Transcribed")
             }
@@ -609,6 +647,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             textField2.text = reverseString
         }
         
+//
         countLabel2.text = "\(textField.text!.count)"
         
         // Letters that aren't G,C,A,T
@@ -673,7 +712,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 
             iconView.isHidden = true
             navigationItem.titleView = iconView
-            navigationItem.leftBarButtonItems = [menuButton, editButtonItem]
+            
+            var fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
+            fixedSpace.width = width * 0.38
+
+            navigationItem.leftBarButtonItems = [menuButton, fixedSpace, editButtonItem]
             
         } else {
             leadingC.constant = 0
