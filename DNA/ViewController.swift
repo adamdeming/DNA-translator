@@ -329,9 +329,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     @objc func textField2Listener(textField2: UITextField) {
-        reverseTranslate()
         
         countLabel2.text = "\(textField2.text!.count)"
+        reverseTranslate()
+
         stepper.value = 1
         stepper.isHidden = true
         readingFrameValueLabel.isHidden = true
@@ -593,7 +594,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         countLabel1.text = "\(textField.text!.count)"
         
         // Letters that aren't G,C,A,T
-        let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","T","V","W","X","Y","Z"]
+        let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","T","V","W","X","Y","Z", " "]
         
         for letter in nonNucleotideLetters {
             if textField2.text!.contains(letter) || textField2.text!.containsNumbers() {
@@ -651,7 +652,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         countLabel2.text = "\(textField.text!.count)"
         
         // Letters that aren't G,C,A,T
-        let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","U","V","W","X","Y","Z"]
+        let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","U","V","W","X","Y","Z", " "]
         
         for letter in nonNucleotideLetters {
             if textField.text!.contains(letter) || textField.text!.containsNumbers() {
