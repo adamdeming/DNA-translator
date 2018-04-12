@@ -75,7 +75,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         print("VIEW WIDTH: \(view.frame.width)")
         print("VIEW HEIGHT: \(view.frame.height)")
         
-        if height < 400 {
+        if width == 812 {
            iphone10UI()
         }
         else {
@@ -203,7 +203,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         transcribeButtonOutlet.frame = CGRect(x: (width / 2) - (transcribeButtonOutlet.frame.size.width/2), y: height * 0.2, width: transcribeButtonOutlet.frame.size.width, height: transcribeButtonOutlet.frame.size.height)
         mainView.addSubview(transcribeButtonOutlet)
         
-        translateButtonOutlet.frame = CGRect(x: (width / 2) - (translateButtonOutlet.frame.size.width/2), y: height * 0.4, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
+        translateButtonOutlet.frame = CGRect(x: (width / 2) - (translateButtonOutlet.frame.size.width/2), y: height * 0.43, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
         mainView.addSubview(translateButtonOutlet)
         
         stepper.frame = CGRect(x: 40, y: height * 0.73, width: stepper.frame.size.width, height: stepper.frame.size.height)
@@ -214,7 +214,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         mainView.addSubview(readingFrameValueLabel)
         readingFrameValueLabel.isHidden = true
         
-        let iconView = UIImageView(frame: CGRect(x: 0, y: 15, width: 16, height: 30))
+        let iconView = UIImageView(frame: CGRect(x: 0, y: 20, width: 16, height: 30))
         iconView.contentMode = .scaleAspectFit
         
         let image = UIImage(named: "DNAStrandSolo")
@@ -269,7 +269,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         transcribeButtonOutlet.frame = CGRect(x: (width / 2.2) - (transcribeButtonOutlet.frame.size.width/2.2), y: height * 0.2, width: transcribeButtonOutlet.frame.size.width, height: transcribeButtonOutlet.frame.size.height)
         mainView.addSubview(transcribeButtonOutlet)
         
-        translateButtonOutlet.frame = CGRect(x: (width / 2.2) - (translateButtonOutlet.frame.size.width/2.2), y: height * 0.4, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
+        translateButtonOutlet.frame = CGRect(x: (width / 2.2) - (translateButtonOutlet.frame.size.width/2.2), y: height * 0.43, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
         mainView.addSubview(translateButtonOutlet)
         
         
@@ -457,7 +457,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         for element in textField2.text! {
             numberOfCharacters += 1
-            print(numberOfCharacters)
+            //print(numberOfCharacters)
             
             rnaSequenceDebug.append(String(element))
             checkRNA.append(String(element))
@@ -474,7 +474,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                         labelTranslated.text! = RNA
                         checkRNA.removeAll()
                         //                        singleLetterAminoAcidOutlet.isHidden = false
-                        print("TranslatedLabelCount: \(labelTranslated.text!.count)")
+                       // print("TranslatedLabelCount: \(labelTranslated.text!.count)")
                     }
                     
                 }
@@ -884,15 +884,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         //        cell.backgroundColor = UIColor.blue
         
         cell.singleLetterButton.setTitle(collectionItems[indexPath.item], for: .normal)
-        print(collectionItems[indexPath.item])
+        //print(collectionItems[indexPath.item])
         
         var pink = UIColor(hexString: "#E91E63")
-
+        var green = UIColor(hexString: "#00C853")
+        
         if collectionItems[indexPath.item] == "Stop" {
             cell.backgroundColor = .black
-        } else {
+        } else if collectionItems[indexPath.item] == "Met" || collectionItems[indexPath.item] == "M"  {
+            cell.backgroundColor = green
+        }
+        else {
             cell.backgroundColor = pink
         }
+        
+        
         return cell
     }
 
@@ -932,7 +938,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             
             let labelWithoutDashes = self.labelTranslated.text!.components(separatedBy: "-")
             self.collectionItems = labelWithoutDashes
-            print(collectionItems)
+           // print(collectionItems)
             self.collectionView.reloadData()
             
             isSingleLetter = false
