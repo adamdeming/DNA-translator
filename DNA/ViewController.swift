@@ -10,7 +10,6 @@ import UIKit
 import AVFoundation
 
 
-
 class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
 
     // Outlets
@@ -64,6 +63,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     let defaults = UserDefaults.standard
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -165,6 +165,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         textFieldListener(textField: textField)
         
     }
+    
+
     
     func otherIphoneUI() {
         tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: height - 50)
@@ -406,9 +408,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
 
     @IBAction func translateButton(_ sender: Any) {
-    
 
-        
         if isAction == true {
             originalString = textField2.text!
             isAction = true
@@ -592,7 +592,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
         
         countLabel1.text = "\(textField.text!.count)"
-        
+
+        if textField2.text!.containsEmoji == true {
+            textField2.text = "Since when were emojis part of DNA?"
+            textField.text = ""
+            labelTranslated.text = ""
+            countLabel1.text = "0"
+            countLabel2.text = "0"
+        }
         // Letters that aren't G,C,A,T
         let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","T","V","W","X","Y","Z", " "]
         
@@ -605,6 +612,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                 countLabel2.text = "0"
             }
         }
+        
         
     }
     
@@ -651,6 +659,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //
         countLabel2.text = "\(textField.text!.count)"
         
+        if textField.text!.containsEmoji == true {
+            textField.text = "Since when were emojis part of DNA?"
+            textField2.text = ""
+            labelTranslated.text = ""
+            countLabel1.text = "0"
+            countLabel2.text = "0"
+        }
+
         // Letters that aren't G,C,A,T
         let nonNucleotideLetters = ["B","D","E","F","H","I","J","K","L","M","N","O","P","Q","R","S","U","V","W","X","Y","Z", " "]
         
@@ -1052,5 +1068,28 @@ extension UIColor {
         }
         self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
     }
+}
+
+extension String {
+    
+    var containsEmoji: Bool {
+        for scalar in unicodeScalars {
+            switch scalar.value {
+            case 0x1F600...0x1F64F, // Emoticons
+            0x1F300...0x1F5FF, // Misc Symbols and Pictographs
+            0x1F680...0x1F6FF, // Transport and Map
+            0x2600...0x26FF,   // Misc symbols
+            0x2700...0x27BF,   // Dingbats
+            0xFE00...0xFE0F,   // Variation Selectors
+            0x1F900...0x1F9FF, // Supplemental Symbols and Pictographs
+            0x1F1E6...0x1F1FF: // Flags
+                return true
+            default:
+                continue
+            }
+        }
+        return false
+    }
+    
 }
 
