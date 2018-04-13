@@ -25,6 +25,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var leadingC: NSLayoutConstraint!
     @IBOutlet weak var trailingC: NSLayoutConstraint!
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var navBar: UINavigationItem!
     @IBOutlet weak var menuButton: UIBarButtonItem!
@@ -336,7 +337,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     @objc func textField2Listener(textField2: UITextField) {
-        textField2.resignFirstResponder()
+        
+        rnaKeyboard()
         
         textField2.text! = textField2.text!.uppercased()
         textField2.text! = removeSpecialCharsFromString(text: textField2.text!)
@@ -742,7 +744,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             navigationItem.titleView = iconView
             
             var fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
-            fixedSpace.width = width * 0.38
+            fixedSpace.width = width * 0.36
 
             navigationItem.leftBarButtonItems = [menuButton, fixedSpace, editButtonItem]
             
@@ -1011,16 +1013,16 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
 
     func dnaKeyboard() {
-        let customKeyboardView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 150))
+        let customKeyboardView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: height * 0.3))
         textField.inputView = customKeyboardView
         customKeyboardView.backgroundColor = .white
         
-        let green = UIColor(hexString: "#00C853")
-        
+        let blue = UIColor(hexString: "#2979FF")
+        let red = UIColor(hexString: "#F44336")
         
         let buttonG = UIButton(type: .system)
-        buttonG.frame = CGRect(x: width * 0.1, y: customKeyboardView.frame.size.height * 0.3, width: 75, height: 75)
-        buttonG.backgroundColor = green
+        buttonG.frame = CGRect(x: width * 0.45, y: customKeyboardView.frame.size.height * 0.3, width: 65, height: 65)
+        buttonG.backgroundColor = blue
         buttonG.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
         buttonG.setTitleColor(.white, for: .normal)
         buttonG.layer.cornerRadius = 5 
@@ -1029,8 +1031,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         customKeyboardView.addSubview(buttonG)
         
         let buttonA = UIButton(type: .system)
-        buttonA.frame = CGRect(x: width * 0.25, y: customKeyboardView.frame.size.height * 0.3, width: 75, height: 75)
-        buttonA.backgroundColor = green
+        buttonA.frame = CGRect(x: width * 0.15, y: customKeyboardView.frame.size.height * 0.3, width: 65, height: 65)
+        buttonA.backgroundColor = blue
         buttonA.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
         buttonA.setTitleColor(.white, for: .normal)
         buttonA.layer.cornerRadius = 5
@@ -1039,8 +1041,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         customKeyboardView.addSubview(buttonA)
         
         let buttonC = UIButton(type: .system)
-        buttonC.frame = CGRect(x: width * 0.4, y: customKeyboardView.frame.size.height * 0.3, width: 75, height: 75)
-        buttonC.backgroundColor = green
+        buttonC.frame = CGRect(x: width * 0.6, y: customKeyboardView.frame.size.height * 0.3, width: 65, height: 65)
+        buttonC.backgroundColor = blue
         buttonC.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
         buttonC.setTitleColor(.white, for: .normal)
         buttonC.layer.cornerRadius = 5
@@ -1049,8 +1051,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         customKeyboardView.addSubview(buttonC)
         
         let buttonT = UIButton(type: .system)
-        buttonT.frame = CGRect(x: width * 0.55, y: customKeyboardView.frame.size.height * 0.3, width: 75, height: 75)
-        buttonT.backgroundColor = green
+        buttonT.frame = CGRect(x: width * 0.3, y: customKeyboardView.frame.size.height * 0.3, width: 65, height: 65)
+        buttonT.backgroundColor = blue
         buttonT.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
         buttonT.setTitleColor(.white, for: .normal)
         buttonT.layer.cornerRadius = 5
@@ -1059,52 +1061,119 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         customKeyboardView.addSubview(buttonT)
         
         let backspaceButton = UIButton(type: .custom)
-        backspaceButton.frame = CGRect(x: width * 0.7, y: customKeyboardView.frame.size.height * 0.3, width: 90, height: 75)
+        backspaceButton.backgroundColor = red
+        backspaceButton.frame = CGRect(x: width * 0.75, y: customKeyboardView.frame.size.height * 0.3, width: 75, height: 65)
         backspaceButton.setImage(#imageLiteral(resourceName: "Backspace"), for: .normal)
         backspaceButton.layer.cornerRadius = 5
         backspaceButton.addTarget(self, action: #selector(backspaceTapped), for: UIControlEvents.touchUpInside)
         customKeyboardView.addSubview(backspaceButton)
         
+    }
+    
+    func rnaKeyboard() {
+        let customKeyboardView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: height * 0.3))
+        textField2.inputView = customKeyboardView
+        customKeyboardView.backgroundColor = .white
+        
+        let blue = UIColor(hexString: "#2979FF")
+        let red = UIColor(hexString: "#F44336")
+        
+        let buttonG = UIButton(type: .system)
+        buttonG.frame = CGRect(x: width * 0.45, y: customKeyboardView.frame.size.height * 0.3, width: 65, height: 65)
+        buttonG.backgroundColor = blue
+        buttonG.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
+        buttonG.setTitleColor(.white, for: .normal)
+        buttonG.layer.cornerRadius = 5
+        buttonG.setTitle("G", for: .normal)
+        buttonG.addTarget(self, action: #selector(GletterTapped), for: UIControlEvents.touchUpInside)
+        customKeyboardView.addSubview(buttonG)
+        
+        let buttonA = UIButton(type: .system)
+        buttonA.frame = CGRect(x: width * 0.15, y: customKeyboardView.frame.size.height * 0.3, width: 65, height: 65)
+        buttonA.backgroundColor = blue
+        buttonA.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
+        buttonA.setTitleColor(.white, for: .normal)
+        buttonA.layer.cornerRadius = 5
+        buttonA.setTitle("A", for: .normal)
+        buttonA.addTarget(self, action: #selector(AletterTapped), for: UIControlEvents.touchUpInside)
+        customKeyboardView.addSubview(buttonA)
+        
+        let buttonC = UIButton(type: .system)
+        buttonC.frame = CGRect(x: width * 0.6, y: customKeyboardView.frame.size.height * 0.3, width: 65, height: 65)
+        buttonC.backgroundColor = blue
+        buttonC.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
+        buttonC.setTitleColor(.white, for: .normal)
+        buttonC.layer.cornerRadius = 5
+        buttonC.setTitle("C", for: .normal)
+        buttonC.addTarget(self, action: #selector(CletterTapped), for: UIControlEvents.touchUpInside)
+        customKeyboardView.addSubview(buttonC)
+        
+        let buttonU = UIButton(type: .system)
+        buttonU.frame = CGRect(x: width * 0.3, y: customKeyboardView.frame.size.height * 0.3, width: 65, height: 65)
+        buttonU.backgroundColor = blue
+        buttonU.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
+        buttonU.setTitleColor(.white, for: .normal)
+        buttonU.layer.cornerRadius = 5
+        buttonU.setTitle("U", for: .normal)
+        buttonU.addTarget(self, action: #selector(UletterTapped), for: UIControlEvents.touchUpInside)
+        customKeyboardView.addSubview(buttonU)
+        
+        let backspaceButton = UIButton(type: .custom)
+        backspaceButton.frame = CGRect(x: width * 0.75, y: customKeyboardView.frame.size.height * 0.3, width: 75, height: 65)
+        backspaceButton.backgroundColor = red
+        backspaceButton.setImage(#imageLiteral(resourceName: "Backspace"), for: .normal)
+        backspaceButton.layer.cornerRadius = 5
+        backspaceButton.addTarget(self, action: #selector(backspaceTapped), for: UIControlEvents.touchUpInside)
+        customKeyboardView.addSubview(backspaceButton)
         
     }
     
     @objc func GletterTapped() {
-        if Int(stepper.value) == 1 {
-        textField.text?.append("G")
-        }
         
+        textField.text?.append("G")
         countLabel1.text = "\(textField.text!.count)"
+        countLabel2.text = "\(textField2.text!.count)"
         reverseTranscribe()
+        reverseTranslate()
 
     }
     @objc func AletterTapped() {
-        if Int(stepper.value) == 1 {
-            textField.text?.append("A")
-        }
-        
+        textField.text?.append("A")
         countLabel1.text = "\(textField.text!.count)"
+        countLabel2.text = "\(textField2.text!.count)"
         reverseTranscribe()
+        reverseTranslate()
     }
     @objc func CletterTapped() {
-        if Int(stepper.value) == 1 {
-            textField.text?.append("C")
-        }
-        
+        textField.text?.append("C")
         countLabel1.text = "\(textField.text!.count)"
+        countLabel2.text = "\(textField2.text!.count)"
         reverseTranscribe()
+        reverseTranslate()
     }
     
     @objc func TletterTapped() {
-        if Int(stepper.value) == 1 {
-            textField.text?.append("T")
-        }
+        textField.text?.append("T")
         countLabel1.text = "\(textField.text!.count)"
+        countLabel2.text = "\(textField2.text!.count)"
         reverseTranscribe()
+        reverseTranslate()
     }
+    
+    @objc func UletterTapped() {
+        textField2.text?.append("U")
+        countLabel1.text = "\(textField.text!.count)"
+        countLabel2.text = "\(textField2.text!.count)"
+        reverseTranslate()
+    }
+    
     @objc func backspaceTapped() {
 
-        if textField.text!.count > 1 {
+        if textField.text!.count > 0 {
         textField.text?.removeLast()
+        textField2.text?.removeLast()
+        } else {
+            print("No characters to backspace")
         }
             
         countLabel1.text = "\(textField.text!.count)"
