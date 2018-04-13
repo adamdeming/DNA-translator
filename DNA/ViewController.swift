@@ -345,7 +345,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         countLabel2.text = "\(textField2.text!.count)"
         reverseTranslate()
 
-        stepper.value = 1
         stepper.isHidden = true
         readingFrameValueLabel.isHidden = true
         collectionView.isHidden = true
@@ -354,11 +353,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         if textField2.text == "" {
             labelTranslated.text = ""
             originalString = ""
-            stepper.isHidden = true
-            readingFrameValueLabel.isHidden = true
-            countLabel2.text = "0"
         }
-        
         
         stepper.value = 1
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
@@ -509,7 +504,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         readingFrameValueLabel.isHidden = false
         
         // Update History Table View
-        if stepper.value == 1 {
+        if stepper.value == 1 && textField2.text!.count > 2 {
 
             tableViewArray.append(labelTranslated.text!)
             tableViewArray = tableViewArray.filter { $0 != "" }
@@ -744,7 +739,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             navigationItem.titleView = iconView
             
             var fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
-            fixedSpace.width = width * 0.36
+            fixedSpace.width = width * 0.37
 
             navigationItem.leftBarButtonItems = [menuButton, fixedSpace, editButtonItem]
             
@@ -846,15 +841,21 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         if editingStyle == .delete {
             print("Deleted")
             
-////
-            tableViewArray.remove(at: indexPath.row)
-            historyArrayDNA.remove(at: indexPath.row)
-            historyArrayRNA.remove(at: indexPath.row)
 //
+            if historyArrayDNA.count == historyArrayRNA.count {
+                tableViewArray.remove(at: indexPath.row)
+                historyArrayDNA.remove(at: indexPath.row)
+                historyArrayRNA.remove(at: indexPath.row)
+            } else {
+
+                tableViewArray.removeAll()
+                historyArrayDNA.removeAll()
+                historyArrayRNA.removeAll()
+            }
 //            tableViewArray.removeAll()
 //            historyArrayRNA.removeAll()
 //            historyArrayDNA.removeAll()
-//
+
             if tableViewArray.isEmpty {
                 historyArrayDNA.removeAll()
                 historyArrayRNA.removeAll()
