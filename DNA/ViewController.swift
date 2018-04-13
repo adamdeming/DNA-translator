@@ -40,6 +40,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     var player: AVPlayer!
     var playerLayer: AVPlayerLayer!
 
+    
     //
     var width: CGFloat!
     var height: CGFloat!
@@ -87,7 +88,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         // Tap View to dismiss keyboard
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.dismissKeyboard))
         mainView.addGestureRecognizer(tap)
-        
+    
         // Set textfield delegate for return key dismiss
         self.textField.delegate = self
         self.textField2.delegate = self
@@ -162,7 +163,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         print("Stepper XY: \(stepper.frame.origin.x),\(stepper.frame.origin.y)")
         print("Reading Frame Label XY: \(readingFrameValueLabel.frame.origin.x),\(readingFrameValueLabel.frame.origin.y)")
         
-        textFieldListener(textField: textField)
         
     }
     
@@ -294,6 +294,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         
     }
+    
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -309,6 +310,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     }
     
     @objc func textFieldListener(textField: UITextField) {
+
+        dnaKeyboard()
+
+        textField.text! = textField.text!.uppercased()
+        textField.text! = removeSpecialCharsFromString(text: textField.text!)
         countLabel1.text = "\(textField.text!.count)"
         reverseTranscribe()
         
@@ -327,11 +333,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
         originalString = textField2.text!
         
-        
     }
     
     @objc func textField2Listener(textField2: UITextField) {
+        textField2.resignFirstResponder()
         
+        textField2.text! = textField2.text!.uppercased()
+        textField2.text! = removeSpecialCharsFromString(text: textField2.text!)
         countLabel2.text = "\(textField2.text!.count)"
         reverseTranslate()
 
@@ -504,13 +512,15 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             tableViewArray.append(labelTranslated.text!)
             tableViewArray = tableViewArray.filter { $0 != "" }
             
+            
             historyArrayDNA.append(textField.text!)
             historyArrayDNA = historyArrayDNA.filter { $0 != "" }
             historyArrayDNA = historyArrayDNA.filter { $0 != "Nucleotide sequence not recognized" }
-            
+
             historyArrayRNA.append(textField2.text!)
             historyArrayRNA = historyArrayRNA.filter { $0 != "" }
             historyArrayRNA = historyArrayRNA.filter { $0 != "Nucleotide sequence not recognized" }
+            
             
             tableViewArray.removeDuplicates()
             historyArrayDNA.removeDuplicates()
@@ -547,12 +557,14 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         countLabel2.text = "\(textField2.text!.count)"
         
         hideCollectionView()
+
     
     }
 
     
     func reverseTranslate() {
         // complementary mRNA transcription
+        
         var reverseString = ""
         for i in textField2.text! {
             switch i {
@@ -702,7 +714,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         dismissKeyboard()
         
-        
         let iconView = UIImageView(frame: CGRect(x: 0, y: 15, width: 16, height: 30))
         iconView.contentMode = .scaleAspectFit
         
@@ -832,7 +843,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             print("Deleted")
-//
+            
+////
             tableViewArray.remove(at: indexPath.row)
             historyArrayDNA.remove(at: indexPath.row)
             historyArrayRNA.remove(at: indexPath.row)
@@ -990,6 +1002,116 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         }
         
     }
+    
+    func removeSpecialCharsFromString(text: String) -> String {
+        let okayChars : Set<Character> =
+            Set("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890+-*=(),.:!_")
+        return String(text.filter {okayChars.contains($0) })
+    }
+    
+
+    func dnaKeyboard() {
+        let customKeyboardView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 150))
+        textField.inputView = customKeyboardView
+        customKeyboardView.backgroundColor = .white
+        
+        let green = UIColor(hexString: "#00C853")
+        
+        
+        let buttonG = UIButton(type: .system)
+        buttonG.frame = CGRect(x: width * 0.1, y: customKeyboardView.frame.size.height * 0.3, width: 75, height: 75)
+        buttonG.backgroundColor = green
+        buttonG.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
+        buttonG.setTitleColor(.white, for: .normal)
+        buttonG.layer.cornerRadius = 5 
+        buttonG.setTitle("G", for: .normal)
+        buttonG.addTarget(self, action: #selector(GletterTapped), for: UIControlEvents.touchUpInside)
+        customKeyboardView.addSubview(buttonG)
+        
+        let buttonA = UIButton(type: .system)
+        buttonA.frame = CGRect(x: width * 0.25, y: customKeyboardView.frame.size.height * 0.3, width: 75, height: 75)
+        buttonA.backgroundColor = green
+        buttonA.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
+        buttonA.setTitleColor(.white, for: .normal)
+        buttonA.layer.cornerRadius = 5
+        buttonA.setTitle("A", for: .normal)
+        buttonA.addTarget(self, action: #selector(AletterTapped), for: UIControlEvents.touchUpInside)
+        customKeyboardView.addSubview(buttonA)
+        
+        let buttonC = UIButton(type: .system)
+        buttonC.frame = CGRect(x: width * 0.4, y: customKeyboardView.frame.size.height * 0.3, width: 75, height: 75)
+        buttonC.backgroundColor = green
+        buttonC.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
+        buttonC.setTitleColor(.white, for: .normal)
+        buttonC.layer.cornerRadius = 5
+        buttonC.setTitle("C", for: .normal)
+        buttonC.addTarget(self, action: #selector(CletterTapped), for: UIControlEvents.touchUpInside)
+        customKeyboardView.addSubview(buttonC)
+        
+        let buttonT = UIButton(type: .system)
+        buttonT.frame = CGRect(x: width * 0.55, y: customKeyboardView.frame.size.height * 0.3, width: 75, height: 75)
+        buttonT.backgroundColor = green
+        buttonT.titleLabel?.font =  UIFont.boldSystemFont(ofSize: 25)
+        buttonT.setTitleColor(.white, for: .normal)
+        buttonT.layer.cornerRadius = 5
+        buttonT.setTitle("T", for: .normal)
+        buttonT.addTarget(self, action: #selector(TletterTapped), for: UIControlEvents.touchUpInside)
+        customKeyboardView.addSubview(buttonT)
+        
+        let backspaceButton = UIButton(type: .custom)
+        backspaceButton.frame = CGRect(x: width * 0.7, y: customKeyboardView.frame.size.height * 0.3, width: 90, height: 75)
+        backspaceButton.setImage(#imageLiteral(resourceName: "Backspace"), for: .normal)
+        backspaceButton.layer.cornerRadius = 5
+        backspaceButton.addTarget(self, action: #selector(backspaceTapped), for: UIControlEvents.touchUpInside)
+        customKeyboardView.addSubview(backspaceButton)
+        
+        
+    }
+    
+    @objc func GletterTapped() {
+        if Int(stepper.value) == 1 {
+        textField.text?.append("G")
+        }
+        
+        countLabel1.text = "\(textField.text!.count)"
+        reverseTranscribe()
+
+    }
+    @objc func AletterTapped() {
+        if Int(stepper.value) == 1 {
+            textField.text?.append("A")
+        }
+        
+        countLabel1.text = "\(textField.text!.count)"
+        reverseTranscribe()
+    }
+    @objc func CletterTapped() {
+        if Int(stepper.value) == 1 {
+            textField.text?.append("C")
+        }
+        
+        countLabel1.text = "\(textField.text!.count)"
+        reverseTranscribe()
+    }
+    
+    @objc func TletterTapped() {
+        if Int(stepper.value) == 1 {
+            textField.text?.append("T")
+        }
+        countLabel1.text = "\(textField.text!.count)"
+        reverseTranscribe()
+    }
+    @objc func backspaceTapped() {
+
+        if textField.text!.count > 1 {
+        textField.text?.removeLast()
+        }
+            
+        countLabel1.text = "\(textField.text!.count)"
+        reverseTranscribe()
+        
+    }
+    
     
 
 }
