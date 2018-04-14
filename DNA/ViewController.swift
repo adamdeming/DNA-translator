@@ -847,7 +847,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                 historyArrayDNA.remove(at: indexPath.row)
                 historyArrayRNA.remove(at: indexPath.row)
             } else {
-
                 tableViewArray.removeAll()
                 historyArrayDNA.removeAll()
                 historyArrayRNA.removeAll()
@@ -1171,8 +1170,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     @objc func backspaceTapped() {
 
         if textField.text!.count > 0 {
-        textField.text?.removeLast()
-        textField2.text?.removeLast()
+            
+            textField.deleteBackward()
+            textField2.deleteBackward()
+            
         } else {
             print("No characters to backspace")
         }
