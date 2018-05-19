@@ -334,6 +334,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         readingFrameValueLabel.text = "reading frame: \(Int(stepper.value))"
         originalString = textField2.text!
         
+    
+        
     }
     
     @objc func textField2Listener(textField2: UITextField) {
@@ -1128,43 +1130,75 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
     }
     
+
     @objc func GletterTapped() {
+    
+        if textField.isEditing == true {
+            textField.insertText("G")
+        } else {
+            textField2.insertText("G")
+        }
         
-        textField.text?.append("G")
-        countLabel1.text = "\(textField.text!.count)"
-        countLabel2.text = "\(textField2.text!.count)"
         reverseTranscribe()
         reverseTranslate()
+        countLabel1.text = "\(textField.text!.count)"
+        countLabel2.text = "\(textField2.text!.count)"
+
+
 
     }
     @objc func AletterTapped() {
-        textField.text?.append("A")
+       
+    
+        if textField.isEditing == true {
+            textField.insertText("A")
+        } else {
+            textField2.insertText("A")
+        }
+        
+          reverseTranscribe()
+          reverseTranslate()
+        
         countLabel1.text = "\(textField.text!.count)"
         countLabel2.text = "\(textField2.text!.count)"
-        reverseTranscribe()
-        reverseTranslate()
+
+
     }
     @objc func CletterTapped() {
-        textField.text?.append("C")
+        
+        if textField.isEditing == true {
+            textField.insertText("C")
+        } else {
+            textField2.insertText("C")
+        }
+        
+            reverseTranscribe()
+            reverseTranslate()
+        
         countLabel1.text = "\(textField.text!.count)"
         countLabel2.text = "\(textField2.text!.count)"
-        reverseTranscribe()
-        reverseTranslate()
+       
+
     }
     
     @objc func TletterTapped() {
-        textField.text?.append("T")
+        
+        textField.insertText("T")
+        
         countLabel1.text = "\(textField.text!.count)"
         countLabel2.text = "\(textField2.text!.count)"
-        reverseTranscribe()
-        reverseTranslate()
+
+
     }
     
     @objc func UletterTapped() {
-        textField2.text?.append("U")
+        
+        
+        textField2.insertText("U")
+        
         countLabel1.text = "\(textField.text!.count)"
         countLabel2.text = "\(textField2.text!.count)"
-        reverseTranslate()
+
     }
     
     @objc func backspaceTapped() {
@@ -1183,6 +1217,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
     }
     
+
     
 
 }
@@ -1283,6 +1318,7 @@ extension String {
         }
         return false
     }
-    
 }
+
+
 
