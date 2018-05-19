@@ -541,6 +541,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                 historyArrayRNA.removeAll()
             }
             
+            if tableViewArray.count != historyArrayDNA.count {
+
+                historyArrayDNA.removeLast()
+                historyArrayRNA.removeLast()
+            }
             
             tableView.reloadData()
         }
@@ -857,6 +862,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //            historyArrayRNA.removeAll()
 //            historyArrayDNA.removeAll()
 
+           
             if tableViewArray.isEmpty {
                 historyArrayDNA.removeAll()
                 historyArrayRNA.removeAll()
