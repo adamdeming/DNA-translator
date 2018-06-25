@@ -815,6 +815,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("You tapped cell number \(indexPath.row).")
         
+    
         labelTranslated.text = tableViewArray[indexPath.row]
         textField.text = historyArrayDNA[indexPath.row]
         textField2.text = historyArrayRNA[indexPath.row]
@@ -849,7 +850,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             print("Deleted")
             
 //
-            if historyArrayDNA.count == historyArrayRNA.count {
+            if  tableViewArray.count == historyArrayRNA.count & historyArrayDNA.count {
                 tableViewArray.remove(at: indexPath.row)
                 historyArrayDNA.remove(at: indexPath.row)
                 historyArrayRNA.remove(at: indexPath.row)
@@ -1145,8 +1146,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             textField2.insertText("G")
         }
         
-        reverseTranscribe()
-        reverseTranslate()
         countLabel1.text = "\(textField.text!.count)"
         countLabel2.text = "\(textField2.text!.count)"
 
@@ -1162,8 +1161,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             textField2.insertText("A")
         }
         
-          reverseTranscribe()
-          reverseTranslate()
         
         countLabel1.text = "\(textField.text!.count)"
         countLabel2.text = "\(textField2.text!.count)"
@@ -1177,10 +1174,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         } else {
             textField2.insertText("C")
         }
-        
-            reverseTranscribe()
-            reverseTranslate()
-        
+
         countLabel1.text = "\(textField.text!.count)"
         countLabel2.text = "\(textField2.text!.count)"
        
@@ -1220,6 +1214,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             
         countLabel1.text = "\(textField.text!.count)"
         reverseTranscribe()
+    
         
     }
     
