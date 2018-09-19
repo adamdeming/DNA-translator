@@ -126,7 +126,6 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         editButtonItem.tintColor = UIColor.darkGray
         self.navigationItem.leftBarButtonItems = [menuButton]
-
         
         if (defaults.value(forKey: "historyAmino") != nil) {
             tableViewArray = (defaults.array(forKey: "historyAmino") as? [String])!
@@ -147,10 +146,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         
-        //        // Uncomment to clear NSUserDefaults
-        //        defaults.removeObject(forKey: "historyAminoArrayKey")
-        //        defaults.removeObject(forKey: "DNAKey")
-        //        defaults.removeObject(forKey: "RNAKey")
+//                // Uncomment to clear NSUserDefaults
+//                defaults.removeObject(forKey: "historyAminoArrayKey")
+//                defaults.removeObject(forKey: "DNAKey")
+//                defaults.removeObject(forKey: "RNAKey")
         
         // Listeners for Clear Button Clicked
         textField.addTarget(self, action: #selector(textFieldListener(textField:)), for: UIControlEvents.allEditingEvents)
@@ -269,10 +268,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         collectionView.isHidden = true
         
         // Button UI Setup
-        transcribeButtonOutlet.frame = CGRect(x: (width / 2.2) - (transcribeButtonOutlet.frame.size.width/2.2), y: height * 0.2, width: transcribeButtonOutlet.frame.size.width, height: transcribeButtonOutlet.frame.size.height)
+        transcribeButtonOutlet.frame = CGRect(x: (width / 2.26) - (transcribeButtonOutlet.frame.size.width/2.2), y: height * 0.2, width: transcribeButtonOutlet.frame.size.width, height: transcribeButtonOutlet.frame.size.height)
         mainView.addSubview(transcribeButtonOutlet)
         
-        translateButtonOutlet.frame = CGRect(x: (width / 2.2) - (translateButtonOutlet.frame.size.width/2.2), y: height * 0.43, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
+        translateButtonOutlet.frame = CGRect(x: (width / 2.26) - (translateButtonOutlet.frame.size.width/2.2), y: height * 0.43, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
         mainView.addSubview(translateButtonOutlet)
         
         
@@ -411,6 +410,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         textFieldShouldReturn(textField)
         
         
+        
+        
     }
     
 
@@ -488,15 +489,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
                 }
             }}
         
-//        let main_string = labelTranslated.text!
-//        let string_to_color = "Stop"
-//
-//        let range = (main_string as NSString).range(of: string_to_color)
-//        let attributedString = NSMutableAttributedString(string:main_string)
-//        attributedString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.red , range: range)
-//
-//
-//        labelTranslated.attributedText = attributedString
+
         
         // Return Keyboard
         textFieldShouldReturn(textField2)
@@ -746,7 +739,13 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             navigationItem.titleView = iconView
             
             var fixedSpace:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.fixedSpace, target: nil, action: nil)
-            fixedSpace.width = width * 0.37
+
+            
+            if UIDevice.current.iPhoneX {
+                fixedSpace.width = width * 0.35
+            } else {
+                fixedSpace.width = width * 0.37
+            }
 
             navigationItem.leftBarButtonItems = [menuButton, fixedSpace, editButtonItem]
             
@@ -799,6 +798,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         let cellReuseIdentifier = "cell"
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath)
         
+        
 //        let blurEffect = UIBlurEffect(style: UIBlurEffectStyle.extraLight)
 //        let blurEffectView = UIVisualEffectView(effect: blurEffect)
 //        blurEffectView.frame = view.bounds
@@ -806,7 +806,11 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
 //        tableView.backgroundView?.addSubview(blurEffectView)
         
         // set the text from the data model
+        
+        print(tableViewArray)
+
         cell.textLabel?.text = tableViewArray[indexPath.row]
+    
         
         return cell
     }
@@ -922,6 +926,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "collectionViewCell", for: indexPath as IndexPath) as! CollectionViewCell
         //        cell.backgroundColor = UIColor.blue
+        
+   
         
         cell.singleLetterButton.setTitle(collectionItems[indexPath.item], for: .normal)
         //print(collectionItems[indexPath.item])
@@ -1323,3 +1329,8 @@ extension String {
 
 
 
+extension UIDevice {
+    var iPhoneX: Bool {
+        return UIScreen.main.nativeBounds.height == 2436
+    }
+}
