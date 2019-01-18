@@ -80,6 +80,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         if width == 812 {
            iphone10UI()
         }
+        else if width == 896 {
+            iphoneXSUI()
+        }
         else {
             otherIphoneUI()
         }
@@ -141,6 +144,8 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             defaults.synchronize()
         }
         tableView.reloadData()
+        
+        tableView.showsVerticalScrollIndicator = false
         
         // Gets Rid of Naviagation Bar Line
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -283,6 +288,67 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         mainView.addSubview(readingFrameValueLabel)
         readingFrameValueLabel.isHidden = true
 
+        
+        let iconView = UIImageView(frame: CGRect(x: 0, y: 15, width: 16, height: 30))
+        iconView.contentMode = .scaleAspectFit
+        
+        let image = UIImage(named: "DNAStrandSolo")
+        iconView.image = image
+        
+        navigationItem.titleView = iconView
+        
+        
+    }
+    
+    func iphoneXSUI() {
+        tableView.frame = CGRect(x: 0, y: 0, width: width * 0.5, height: height - 50)
+        view.addSubview(tableView)
+        tableView.isHidden = true
+        
+        view.addSubview(mainView)
+        // TextField UI Setup
+        textField.frame = CGRect(x: 40, y: height * 0.1, width: width-165, height: textField.frame.size.height)
+        mainView.addSubview(textField)
+        
+        textField2.frame = CGRect(x: 40, y: height * 0.3, width: width-165, height: textField2.frame.size.height)
+        mainView.addSubview(textField2)
+        
+        // Count Label UI Setup
+        countLabel1.frame = CGRect(x: 40, y: height * 0.2, width: countLabel1.frame.size.width, height: countLabel1.frame.size.height)
+        mainView.addSubview(countLabel1)
+        countLabel1.text = "0"
+        countLabel2.frame = CGRect(x: 40, y: height * 0.4, width: countLabel2.frame.size.width, height: countLabel2.frame.size.height)
+        mainView.addSubview(countLabel2)
+        countLabel2.text = "0"
+        
+        //        complementButtonOutlet.frame = CGRect(x: (width-40) - complementButtonOutlet.frame.size.width, y: textField.frame.origin.y + 40, width: complementButtonOutlet.frame.size.width, height: complementButtonOutlet.frame.size.height)
+        //        mainView.addSubview(complementButtonOutlet)
+        //        complementButtonOutlet.isHidden = true
+        
+        // Label UI Setup
+        labelTranslated.frame = CGRect(x: stepper.frame.origin.x + 100, y: textField2.frame.origin.y + 80 , width: width-80, height: labelTranslated.frame.size.height)
+        labelTranslated.isHidden = true
+        
+        collectionView.frame = CGRect(x: 40, y: height * 0.5, width: width-160, height: collectionView.frame.size.height)
+        mainView.addSubview(collectionView)
+        collectionView.isHidden = true
+        
+        // Button UI Setup
+        transcribeButtonOutlet.frame = CGRect(x: (width / 2.26) - (transcribeButtonOutlet.frame.size.width/2.2), y: height * 0.2, width: transcribeButtonOutlet.frame.size.width, height: transcribeButtonOutlet.frame.size.height)
+        mainView.addSubview(transcribeButtonOutlet)
+        
+        translateButtonOutlet.frame = CGRect(x: (width / 2.24) - (translateButtonOutlet.frame.size.width/2.24), y: height * 0.43, width: translateButtonOutlet.frame.size.width, height: translateButtonOutlet.frame.size.height)
+        mainView.addSubview(translateButtonOutlet)
+        
+        
+        stepper.frame = CGRect(x: 40, y: height * 0.73, width: stepper.frame.size.width, height: stepper.frame.size.height)
+        mainView.addSubview(stepper)
+        stepper.isHidden = true
+        
+        readingFrameValueLabel.frame = CGRect(x: 35, y: height * 0.8, width: readingFrameValueLabel.frame.size.width, height: readingFrameValueLabel.frame.size.height)
+        mainView.addSubview(readingFrameValueLabel)
+        readingFrameValueLabel.isHidden = true
+        
         
         let iconView = UIImageView(frame: CGRect(x: 0, y: 15, width: 16, height: 30))
         iconView.contentMode = .scaleAspectFit
@@ -709,6 +775,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
     
     @IBAction func menuAction(_ sender: Any) {
         
+        
         dismissKeyboard()
         
         let iconView = UIImageView(frame: CGRect(x: 0, y: 15, width: 16, height: 30))
@@ -720,6 +787,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         if !menuIsVisible {
             
+            if width == 896 {
+                tableView.isHidden = false
+            }
             /// iphone 10 size fix
             if width < 800 {
                 leadingC.constant = width * 0.5
@@ -750,6 +820,9 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             navigationItem.leftBarButtonItems = [menuButton, fixedSpace, editButtonItem]
             
         } else {
+            if width == 896 {
+            tableView.isHidden = true
+            }
             leadingC.constant = 0
             trailingC.constant = 0
             countLabel1.isHidden = false
@@ -775,12 +848,25 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             print("Swipe Right")
             self.menuAction((Any).self)
             
+            if width == 896 {
+                tableView.isHidden = false
+            }
+            
         }
         else if gesture.direction == UISwipeGestureRecognizerDirection.left {
             print("Swipe Left")
             if menuIsVisible == true {
                 self.menuAction((Any).self)
+                
+                if width == 896 {
+                    tableView.isHidden = true
+                }
+                
             }
+            
+            
+            
+            
         }
         
     }
@@ -809,8 +895,10 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
         
         print(tableViewArray)
 
+    
         cell.textLabel?.text = tableViewArray[indexPath.row]
     
+        
         
         return cell
     }
@@ -892,7 +980,7 @@ class ViewController: UIViewController, UITextFieldDelegate, UITableViewDelegate
             defaults.set(historyArrayDNA, forKey: "historyDNA")
             defaults.set(historyArrayRNA, forKey: "historyRNA")
             defaults.synchronize()
-            
+        
             tableView.reloadData()
         }
         
